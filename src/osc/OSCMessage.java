@@ -12,12 +12,12 @@
  *     and arguments (what is the contents of this message).
  */
 
-package com.illposed.osc;
+package osc;
 
 import java.util.Enumeration;
 import java.util.Vector;
 
-import com.illposed.osc.utility.*;
+import osc.utility.*;
 
 public class OSCMessage extends OSCPacket {
 

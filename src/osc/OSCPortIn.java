@@ -26,12 +26,12 @@
  * to this computer, port 57110 (defaultSCOSCPort), with the address /message/receiving
  */
 
-package com.illposed.osc;
+package osc;
 
 import java.net.*;
 import java.io.IOException;
-import com.illposed.osc.utility.OSCByteArrayToJavaConverter;
-import com.illposed.osc.utility.OSCPacketDispatcher;
+import osc.utility.OSCByteArrayToJavaConverter;
+import osc.utility.OSCPacketDispatcher;
 
 public class OSCPortIn extends OSCPort implements Runnable {
 

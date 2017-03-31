@@ -16,14 +16,16 @@
  * Internally, I use Vector to maintain jdk1.1 compatability
  */
 
-package com.illposed.osc;
+package osc;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
-import com.illposed.osc.utility.*;
+import osc.utility.*;
+
+import static sun.plugin.security.JDK11ClassFileTransformer.init;
 
 public class OSCBundle extends OSCPacket {
 

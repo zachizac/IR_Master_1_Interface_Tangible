@@ -12,7 +12,7 @@
  *
  */
 
-package com.illposed.osc;
+package osc;
 
 import java.net.*;
 import java.io.IOException;

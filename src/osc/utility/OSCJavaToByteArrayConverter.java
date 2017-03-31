@@ -16,7 +16,7 @@
  * http://www.emergent.de/Goodies/
  */
 
-package com.illposed.osc.utility;
+package osc.utility;
 
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;

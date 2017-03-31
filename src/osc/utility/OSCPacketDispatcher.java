@@ -1,9 +1,9 @@
 /* $Id: OSCPacketDispatcher.java,v 1.2 2008/07/01 15:29:46 modin Exp $
  * Created on 28.10.2003
  */
-package com.illposed.osc.utility;
+package osc.utility;
 
-import com.illposed.osc.*;
+import osc.*;
 
 import java.util.Date;
 import java.util.Enumeration;

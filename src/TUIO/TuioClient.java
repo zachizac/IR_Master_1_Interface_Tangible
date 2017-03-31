@@ -18,7 +18,7 @@
 
 package TUIO;
 
-import com.illposed.osc.*;
+import osc.*;
 import java.util.*;
 
 /**

@@ -20,9 +20,9 @@
  * http://www.emergent.de/Goodies/
  */
 
-package com.illposed.osc;
+package osc;
 
-import com.illposed.osc.utility.*;
+import osc.utility.*;
 
 public abstract class OSCPacket {
 

@@ -1,7 +1,7 @@
 /* $Id: OSCListener.java,v 1.1.1.1 2006/11/13 14:47:21 modin Exp $
  * Created on 28.10.2003
  */
-package com.illposed.osc;
+package osc;
 
 import java.util.Date;
 

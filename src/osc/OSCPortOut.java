@@ -27,11 +27,11 @@
 		 }
  */
 
-package com.illposed.osc;
+package osc;
 
 import java.net.*;
 import java.io.IOException;
-import com.illposed.osc.utility.OSCByteArrayToJavaConverter;
+import osc.utility.OSCByteArrayToJavaConverter;
 
 public class OSCPortOut extends OSCPort {
 

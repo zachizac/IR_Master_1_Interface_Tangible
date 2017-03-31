@@ -1,7 +1,7 @@
 /* $Id: OSCCanNotListenException.java,v 1.1.1.1 2006/11/13 14:47:21 modin Exp $
  * Created on 21.02.2004
  */
-package com.illposed.osc;
+package osc;
 
 /**
  * @author cramakrishnan

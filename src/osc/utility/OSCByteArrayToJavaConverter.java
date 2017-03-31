@@ -1,12 +1,12 @@
 /* $Id: OSCByteArrayToJavaConverter.java,v 1.1.1.1 2006/11/13 14:47:22 modin Exp $
  * Created on 28.10.2003
  */
-package com.illposed.osc.utility;
+package osc.utility;
 
 import java.math.BigInteger;
 import java.util.Date;
 
-import com.illposed.osc.*;
+import osc.*;
 
 /**
  * @author cramakrishnan
