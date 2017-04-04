@@ -23,23 +23,21 @@
 */
 
 import java.awt.*;
-import java.awt.geom.*;
-import java.awt.event.*;
-import java.awt.image.*;
 import java.util.*;
 import javax.swing.*;
 import TUIO.*;
+import tangibleApplication.Models.M_Point;
 
 public class TuioDemoComponent extends JComponent implements TuioListener {
 
-	private Hashtable<Long,TuioDemoObject> objectList = new Hashtable<Long,TuioDemoObject>();
+	private Hashtable<Long,M_Point> objectList = new Hashtable<Long,M_Point>();
 	private Hashtable<Long,TuioCursor> cursorList = new Hashtable<Long,TuioCursor>();
 	private Hashtable<Long,TuioDemoBlob> blobList = new Hashtable<Long,TuioDemoBlob>();
 
 	public static final int finger_size = 15;
-	public static final int object_size = 60;
+	public static final int object_size = 15;
 	public static final int table_size = 760;
-	
+
 	public static int width, height;
 	private float scale = 1.0f;
 	public boolean verbose = false;
@@ -52,7 +50,7 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
 	}
 	
 	public void addTuioObject(TuioObject tobj) {
-		TuioDemoObject demo = new TuioDemoObject(tobj);
+		M_Point demo = new M_Point(tobj);
 		objectList.put(tobj.getSessionID(),demo);
 
 		if (verbose) 
@@ -61,7 +59,7 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
 
 	public void updateTuioObject(TuioObject tobj) {
 
-		TuioDemoObject demo = (TuioDemoObject)objectList.get(tobj.getSessionID());
+		M_Point demo = (M_Point)objectList.get(tobj.getSessionID());
 		demo.update(tobj);
 		
 		if (verbose) 
@@ -83,7 +81,7 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
 		}
 		
 		if (verbose) 
-			System.out.println("add cur "+tcur.getCursorID()+" ("+tcur.getSessionID()+") "+tcur.getX()+" "+tcur.getY());	
+			System.out.println("add cur "+tcur.getCursorID()+" ("+tcur.getSessionID()+") "+tcur.getX()+" "+tcur.getY());
 	}
 
 	public void updateTuioCursor(TuioCursor tcur) {
@@ -95,12 +93,12 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
 	}
 	
 	public void removeTuioCursor(TuioCursor tcur) {
-	
-		cursorList.remove(tcur.getSessionID());	
+
+		cursorList.remove(tcur.getSessionID());
 		repaint();
-		
-		if (verbose) 
-			System.out.println("del cur "+tcur.getCursorID()+" ("+tcur.getSessionID()+")"); 
+
+		if (verbose)
+			System.out.println("del cur "+tcur.getCursorID()+" ("+tcur.getSessionID()+")");
 	}
 
 	public void addTuioBlob(TuioBlob tblb) {
@@ -108,23 +106,23 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
 		blobList.put(tblb.getSessionID(),demo);
 		
 		if (verbose) 
-			System.out.println("add blb "+tblb.getBlobID()+" ("+tblb.getSessionID()+") "+tblb.getX()+" "+tblb.getY()+" "+tblb.getAngle());	
+			System.out.println("add blb "+tblb.getBlobID()+" ("+tblb.getSessionID()+") "+tblb.getX()+" "+tblb.getY()+" "+tblb.getAngle());
 	}
 	
 	public void updateTuioBlob(TuioBlob tblb) {
 		
 		TuioDemoBlob demo = (TuioDemoBlob)blobList.get(tblb.getSessionID());
 		demo.update(tblb);
-		
-		if (verbose) 
-			System.out.println("set blb "+tblb.getBlobID()+" ("+tblb.getSessionID()+") "+tblb.getX()+" "+tblb.getY()+" "+tblb.getAngle()+" "+tblb.getMotionSpeed()+" "+tblb.getRotationSpeed()+" "+tblb.getMotionAccel()+" "+tblb.getRotationAccel()); 	
+
+		if (verbose)
+			System.out.println("set blb "+tblb.getBlobID()+" ("+tblb.getSessionID()+") "+tblb.getX()+" "+tblb.getY()+" "+tblb.getAngle()+" "+tblb.getMotionSpeed()+" "+tblb.getRotationSpeed()+" "+tblb.getMotionAccel()+" "+tblb.getRotationAccel());
 	}
-	
+
 	public void removeTuioBlob(TuioBlob tblb) {
 		blobList.remove(tblb.getSessionID());
-		
-		if (verbose) 
-			System.out.println("del blb "+tblb.getBlobID()+" ("+tblb.getSessionID()+")");	
+
+		if (verbose)
+			System.out.println("del blb "+tblb.getBlobID()+" ("+tblb.getSessionID()+")");
 	}
 	
 	
@@ -173,9 +171,9 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
 		}
 
 		// draw the objects
-		Enumeration<TuioDemoObject> objects = objectList.elements();
+		Enumeration<M_Point> objects = objectList.elements();
 		while (objects.hasMoreElements()) {
-			TuioDemoObject tobj = objects.nextElement();
+			M_Point tobj = objects.nextElement();
 			if (tobj!=null) tobj.paint(g2, width,height);
 		}		
 	}

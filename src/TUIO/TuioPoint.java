@@ -19,8 +19,8 @@
 package TUIO;
 
 /**
- * The TuioPoint class on the one hand is a simple container and utility class to handle TUIO positions in general, 
- * on the other hand the TuioPoint is the base class for the TuioCursor and TuioObject classes.
+ * The M_Point class on the one hand is a simple container and utility class to handle TUIO positions in general,
+ * on the other hand the M_Point is the base class for the TuioCursor and TuioObject classes.
  *
  * @author Martin Kaltenbrunner
  * @version 1.1.0
@@ -40,7 +40,7 @@ public class TuioPoint {
 	 */
 	protected TuioTime currentTime;
 	/**
-	 * The creation time of this TuioPoint represented as TuioTime (time since session start)
+	 * The creation time of this M_Point represented as TuioTime (time since session start)
 	 */
 	protected TuioTime startTime;
 	
@@ -70,10 +70,10 @@ public class TuioPoint {
 	}
 
 	/**
-	 * This constructor takes a TuioPoint argument and sets its coordinate attributes 
-	 * to the coordinates of the provided TuioPoint and its time stamp to the current session time.
+	 * This constructor takes a M_Point argument and sets its coordinate attributes
+	 * to the coordinates of the provided M_Point and its time stamp to the current session time.
 	 *
-	 * @param	tpoint	the TuioPoint to assign
+	 * @param	tpoint	the M_Point to assign
 	 */
 	public TuioPoint(TuioPoint tpoint) {
 		xpos = tpoint.getX();
@@ -98,10 +98,10 @@ public class TuioPoint {
 	}
 	
 	/**
-	 * Takes a TuioPoint argument and updates its coordinate attributes 
-	 * to the coordinates of the provided TuioPoint and leaves its time stamp unchanged.
+	 * Takes a M_Point argument and updates its coordinate attributes
+	 * to the coordinates of the provided M_Point and leaves its time stamp unchanged.
 	 *
-	 * @param	tpoint	the TuioPoint to assign
+	 * @param	tpoint	the M_Point to assign
 	 */
 	public void update(TuioPoint tpoint) {
 		xpos = tpoint.getX();
@@ -110,7 +110,7 @@ public class TuioPoint {
 
 	/**
 	 * Takes two floating point coordinate arguments and updates its coordinate attributes 
-	 * to the coordinates of the provided TuioPoint and leaves its time stamp unchanged.
+	 * to the coordinates of the provided M_Point and leaves its time stamp unchanged.
 	 *
 	 * @param	xp	the X coordinate to assign
 	 * @param	yp	the Y coordinate to assign
@@ -122,7 +122,7 @@ public class TuioPoint {
 	
 	/**
 	 * Takes a TuioTime object and two floating point coordinate arguments and updates its coordinate attributes 
-	 * to the coordinates of the provided TuioPoint and its time stamp to the provided TUIO time object.
+	 * to the coordinates of the provided M_Point and its time stamp to the provided TUIO time object.
 	 *
 	 * @param	ttime	the TuioTime to assign
 	 * @param	xp	the X coordinate to assign
@@ -135,16 +135,16 @@ public class TuioPoint {
 	}
 	
 	/**
-	 * Returns the X coordinate of this TuioPoint. 
-	 * @return	the X coordinate of this TuioPoint
+	 * Returns the X coordinate of this M_Point.
+	 * @return	the X coordinate of this M_Point
 	 */
 	public float getX() {
 		return xpos;
 	}
 	
 	/**
-	 * Returns the Y coordinate of this TuioPoint. 
-	 * @return	the Y coordinate of this TuioPoint
+	 * Returns the Y coordinate of this M_Point.
+	 * @return	the Y coordinate of this M_Point
 	 */
 	public float getY() {
 		return ypos;
@@ -164,10 +164,10 @@ public class TuioPoint {
 	}
 
 	/**
-	 * Returns the distance to the provided TuioPoint 
+	 * Returns the distance to the provided M_Point
 	 *
-	 * @param	tpoint	the distant TuioPoint
-	 * @return	the distance to the provided TuioPoint
+	 * @param	tpoint	the distant M_Point
+	 * @return	the distance to the provided M_Point
 	 */
 	public float getDistance(TuioPoint tpoint) {
 		return getDistance(tpoint.getX(),tpoint.getY());
@@ -193,10 +193,10 @@ public class TuioPoint {
 	}
 	
 	/**
-	 * Returns the angle to the provided TuioPoint 
+	 * Returns the angle to the provided M_Point
 	 *
-	 * @param	tpoint	the distant TuioPoint
-	 * @return	the angle to the provided TuioPoint
+	 * @param	tpoint	the distant M_Point
+	 * @return	the angle to the provided M_Point
 	 */
 	public float getAngle(TuioPoint tpoint) {						
 		return getAngle(tpoint.getX(),tpoint.getY());
@@ -207,17 +207,17 @@ public class TuioPoint {
 	 *
 	 * @param	xp	the X coordinate of the distant point
 	 * @param	yp	the Y coordinate of the distant point
-	 * @return	the angle in degrees to the provided TuioPoint
+	 * @return	the angle in degrees to the provided M_Point
 	 */
 	public float getAngleDegrees(float xp, float yp) {		
 		return (getAngle(xp,yp)/(float)Math.PI)*180.0f;
 	}
 	
 	/**
-	 * Returns the angle in degrees to the provided TuioPoint 
+	 * Returns the angle in degrees to the provided M_Point
 	 *
-	 * @param	tpoint	the distant TuioPoint
-	 * @return	the angle in degrees to the provided TuioPoint
+	 * @param	tpoint	the distant M_Point
+	 * @return	the angle in degrees to the provided M_Point
 	 */
 	public float getAngleDegrees(TuioPoint tpoint) {		
 		return (getAngle(tpoint)/(float)Math.PI)*180.0f;
@@ -227,7 +227,7 @@ public class TuioPoint {
 	 * Returns the X coordinate in pixels relative to the provided screen width. 
 	 *
 	 * @param	width	the screen width
-	 * @return	the X coordinate of this TuioPoint in pixels relative to the provided screen width
+	 * @return	the X coordinate of this M_Point in pixels relative to the provided screen width
 	 */
 	public int getScreenX(int width) {
 		return (int)Math.round(xpos*width);
@@ -237,25 +237,25 @@ public class TuioPoint {
 	 * Returns the Y coordinate in pixels relative to the provided screen height. 
 	 *
 	 * @param	height	the screen height
-	 * @return	the Y coordinate of this TuioPoint in pixels relative to the provided screen height
+	 * @return	the Y coordinate of this M_Point in pixels relative to the provided screen height
 	 */
 	public int getScreenY(int height) {
 		return (int)Math.round(ypos*height);
 	}
 	
 	/**
-	 * Returns the time stamp of this TuioPoint as TuioTime. 
+	 * Returns the time stamp of this M_Point as TuioTime.
 	 *
-	 * @return	the time stamp of this TuioPoint as TuioTime
+	 * @return	the time stamp of this M_Point as TuioTime
 	 */
 	public TuioTime getTuioTime() {
 		return new TuioTime(currentTime);
 	}
 	
 	/**
-	 * Returns the start time of this TuioPoint as TuioTime. 
+	 * Returns the start time of this M_Point as TuioTime.
 	 *
-	 * @return	the start time of this TuioPoint as TuioTime
+	 * @return	the start time of this M_Point as TuioTime
 	 */
 	public TuioTime getStartTime() {
 		return new TuioTime(startTime);

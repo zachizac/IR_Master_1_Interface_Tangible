@@ -12,17 +12,17 @@ import java.awt.geom.Ellipse2D;
  */
 public class M_Point extends TuioObject {
 
-        private Shape square;
+        private Shape point;
 
         public M_Point(TuioObject tobj) {
             super(tobj);
             int size = V_JComponentMain.object_size/2;
-            square = new Ellipse2D.Float(-size/2,-size/2,size,size);
+            point = new Ellipse2D.Float(-size/2,-size/2,size,size);
 
             AffineTransform transform = new AffineTransform();
             transform.translate(xpos,ypos);
             transform.rotate(angle,xpos,ypos);
-            square = transform.createTransformedShape(square);
+            point = transform.createTransformedShape(point);
         }
 
         public void paint(Graphics2D g, int width, int height) {
@@ -35,7 +35,7 @@ public class M_Point extends TuioObject {
             trans.translate(-xpos,-ypos);
             trans.translate(Xpos,Ypos);
             trans.scale(scale,scale);
-            Shape s = trans.createTransformedShape(square);
+            Shape s = trans.createTransformedShape(point);
 
             g.setPaint(Color.black);
             g.fill(s);
@@ -51,12 +51,12 @@ public class M_Point extends TuioObject {
 
             if ((dx != 0) || (dy != 0)) {
                 AffineTransform trans = AffineTransform.getTranslateInstance(dx, dy);
-                square = trans.createTransformedShape(square);
+                point = trans.createTransformedShape(point);
             }
 
             if (da != 0) {
                 AffineTransform trans = AffineTransform.getRotateInstance(da, tobj.getX(), tobj.getY());
-                square = trans.createTransformedShape(square);
+                point = trans.createTransformedShape(point);
             }
 
             super.update(tobj);

@@ -19,7 +19,7 @@ public class V_JComponentMain extends JComponent implements TuioListener {
     //private Hashtable<Long, TuioDemoBlob> blobList = new Hashtable<Long, TuioDemoBlob>();
 
     public static final int finger_size = 15;
-    public static final int object_size = 60;
+    public static final int object_size = 20;
     public static final int table_size = 760;
 
     public static int width, height;
@@ -34,18 +34,23 @@ public class V_JComponentMain extends JComponent implements TuioListener {
     }
 
     public void addTuioObject(TuioObject tobj) {
-        M_Point demo = new M_Point(tobj);
-        objectList.put(tobj.getSessionID(),demo);
+        if(tobj.getSymbolID() == 10){
+            System.out.println("coucou je suis le tag special");
 
+        }
+        else {
+            M_Point demo = new M_Point(tobj);
+            objectList.put(tobj.getSessionID(), demo);
+        }
         if (verbose)
             System.out.println("add obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+") "+tobj.getX()+" "+tobj.getY()+" "+tobj.getAngle());
     }
 
     public void updateTuioObject(TuioObject tobj) {
-
-        M_Point demo = (M_Point)objectList.get(tobj.getSessionID());
-        demo.update(tobj);
-
+        if(tobj.getSymbolID() != 10) {
+            M_Point demo = (M_Point) objectList.get(tobj.getSessionID());
+            demo.update(tobj);
+        }
         if (verbose)
             System.out.println("set obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+") "+tobj.getX()+" "+tobj.getY()+" "+tobj.getAngle()+" "+tobj.getMotionSpeed()+" "+tobj.getRotationSpeed()+" "+tobj.getMotionAccel()+" "+tobj.getRotationAccel());
     }
