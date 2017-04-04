@@ -1,7 +1,9 @@
 package tangibleApplication.Views;
 
 import TUIO.*;
+import tangibleApplication.Controlers.C_Client;
 import tangibleApplication.Models.M_Point;
+import tangibleApplication.Models.M_Segment;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,15 +18,27 @@ public class V_JComponentMain extends JComponent implements TuioListener {
 
     private Hashtable<Long,M_Point> objectList = new Hashtable<Long, M_Point>();
     private Hashtable<Long, TuioCursor> cursorList = new Hashtable<Long,TuioCursor>();
+    private Hashtable<Long, M_Segment> segmentList = new Hashtable<Long, M_Segment>();
+
     //private Hashtable<Long, TuioDemoBlob> blobList = new Hashtable<Long, TuioDemoBlob>();
 
     public static final int finger_size = 15;
     public static final int object_size = 20;
     public static final int table_size = 760;
+    public static final int id_segment = 10;
+
 
     public static int width, height;
     private float scale = 1.0f;
+    private C_Client controlClient;
+    private Long nbrSegments = new Long(0);
+
     public boolean verbose = false;
+
+    public V_JComponentMain(){
+        super();
+        controlClient = new C_Client(this);
+    }
 
     public void setSize(int w, int h) {
         super.setSize(w,h);
@@ -34,9 +48,9 @@ public class V_JComponentMain extends JComponent implements TuioListener {
     }
 
     public void addTuioObject(TuioObject tobj) {
-        if(tobj.getSymbolID() == 10){
+        if(tobj.getSymbolID() == id_segment){
             System.out.println("coucou je suis le tag special");
-
+            controlClient.newSegment();
         }
         else {
             M_Point demo = new M_Point(tobj);
@@ -47,7 +61,7 @@ public class V_JComponentMain extends JComponent implements TuioListener {
     }
 
     public void updateTuioObject(TuioObject tobj) {
-        if(tobj.getSymbolID() != 10) {
+        if(tobj.getSymbolID() != id_segment) {
             M_Point demo = (M_Point) objectList.get(tobj.getSessionID());
             demo.update(tobj);
         }
@@ -165,6 +179,13 @@ public class V_JComponentMain extends JComponent implements TuioListener {
             M_Point tobj = objects.nextElement();
             if (tobj!=null) tobj.paint(g2, width,height);
         }
+
+        Enumeration<M_Segment> segments = segmentList.elements();
+        while (segments.hasMoreElements()){
+            M_Segment s = segments.nextElement();
+            if(s!=null) s.paint(g2, width, height);
+        }
+
     }
 
     public boolean isVerbose() {
@@ -173,5 +194,14 @@ public class V_JComponentMain extends JComponent implements TuioListener {
 
     public void setVerbose(boolean verbose) {
         this.verbose = verbose;
+    }
+
+    public Hashtable<Long, M_Point> getObjectList() {
+        return objectList;
+    }
+
+    public void addSegmentList(M_Segment segment) {
+        nbrSegments++;
+        this.segmentList.put(nbrSegments,segment);
     }
 }
