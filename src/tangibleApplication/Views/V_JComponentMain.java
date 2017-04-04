@@ -161,4 +161,12 @@ public class V_JComponentMain extends JComponent implements TuioListener {
             if (tobj!=null) tobj.paint(g2, width,height);
         }
     }
+
+    public boolean isVerbose() {
+        return verbose;
+    }
+
+    public void setVerbose(boolean verbose) {
+        this.verbose = verbose;
+    }
 }

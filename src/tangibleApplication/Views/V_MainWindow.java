@@ -1,6 +1,7 @@
 package tangibleApplication.Views;
 
 import TUIO.TuioListener;
+import tangibleApplication.Controlers.C_FullScreen;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,7 +27,11 @@ public class V_MainWindow {
     private GraphicsDevice device;
     private Cursor invisibleCursor;
 
+    /**
+     * Constructeur de MainWindow, la fenetre de l'application
+     */
     public V_MainWindow() {
+        //on cree le component
         comp = new V_JComponentMain();
         device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         invisibleCursor = Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "invisible cursor");
@@ -34,32 +39,31 @@ public class V_MainWindow {
         showWindow();
     }
 
+    /**
+     * getter du Listener
+     * @return le TuioListener correspondant au JComponent
+     */
     public TuioListener getTuioListener() {
         return comp;
     }
 
+    /**
+     * methode de creation du JFrame
+     */
     public void setupWindow() {
 
         frame = new JFrame();
         frame.add(comp);
 
-        frame.setTitle("TuioDemo");
+        frame.setTitle("TangibleApplication");
         frame.setResizable(false);
 
         frame.addWindowListener( new WindowAdapter() { public void windowClosing(WindowEvent evt) {
             System.exit(0);
         } });
 
-        frame.addKeyListener( new KeyAdapter() { public void keyPressed(KeyEvent evt) {
-            if (evt.getKeyCode()==KeyEvent.VK_ESCAPE) System.exit(0);
-            else if (evt.getKeyCode()==KeyEvent.VK_F1) {
-                destroyWindow();
-                setupWindow();
-                fullscreen = !fullscreen;
-                showWindow();
-            }
-            else if (evt.getKeyCode()==KeyEvent.VK_V) comp.verbose=!comp.verbose;
-        } });
+        frame.addKeyListener( new C_FullScreen(this));
+
     }
 
     public void destroyWindow() {
@@ -95,5 +99,17 @@ public class V_MainWindow {
 
         frame.setVisible(true);
         frame.repaint();
+    }
+
+    public boolean isFullscreen() {
+        return fullscreen;
+    }
+
+    public void setFullscreen(boolean fullscreen) {
+        this.fullscreen = fullscreen;
+    }
+
+    public V_JComponentMain getComp() {
+        return comp;
     }
 }
