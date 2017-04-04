@@ -66,6 +66,9 @@ public class V_MainWindow {
 
     }
 
+    /**
+     * Methode de destruction de la fenetre pour switcher en mode plein ecran
+     */
     public void destroyWindow() {
 
         frame.setVisible(false);
@@ -75,6 +78,9 @@ public class V_MainWindow {
         frame = null;
     }
 
+    /**
+     * Methode permettant l'affichage de la frame
+     */
     public void showWindow() {
 
         if (fullscreen) {
@@ -94,7 +100,7 @@ public class V_MainWindow {
             frame.pack();
             Insets insets = frame.getInsets();
             frame.setSize(width,height +insets.top);
-            frame.setCursor(Cursor.getDefaultCursor());
+            //frame.setCursor(Cursor.getDefaultCursor());
         }
 
         frame.setVisible(true);

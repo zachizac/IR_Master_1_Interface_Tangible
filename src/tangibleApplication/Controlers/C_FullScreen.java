@@ -11,6 +11,8 @@ import java.awt.event.KeyListener;
 
 /**
  * Created by Zachizac on 04/04/2017.
+ * Class fullscreen qui ajoute un keylistener pour mettre l'applicatin en plein ecran
+ *
  */
 public class C_FullScreen implements KeyListener{
 
@@ -29,6 +31,7 @@ public class C_FullScreen implements KeyListener{
 
     @Override
     public void keyPressed(KeyEvent e) {
+        //gere l'appuie sur une touche du clavier, notamment F1 pour mettre en plein ecran
         if (e.getKeyCode()==KeyEvent.VK_ESCAPE) System.exit(0);
         else if (e.getKeyCode()==KeyEvent.VK_F1) {
             window.destroyWindow();
