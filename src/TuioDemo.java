@@ -77,7 +77,7 @@ public class TuioDemo  {
 			else if (evt.getKeyCode()==KeyEvent.VK_V) demo.verbose=!demo.verbose;
 		} });
 	}
-	
+
 	public void destroyWindow() {
 	
 		frame.setVisible(false);
