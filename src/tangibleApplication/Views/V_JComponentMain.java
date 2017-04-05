@@ -17,7 +17,7 @@ import java.util.Hashtable;
 public class V_JComponentMain extends JComponent implements TuioListener {
 
     private Hashtable<Long,M_Point> actualObjectList = new Hashtable<Long, M_Point>(); //Liste des points présents actuellement
-    private Hashtable<Long,M_Point> global0bjectList = new Hashtable<Long, M_Point>(); //Liste de tous les points apparru au oours de cette instance
+    private Hashtable<Long,M_Point> global0bjectList = new Hashtable<Long, M_Point>(); //Liste de tous les points apparut au oours de cette instance
     private Hashtable<Long, TuioCursor> cursorList = new Hashtable<Long,TuioCursor>();
     private Hashtable<Long, M_Segment> segmentList = new Hashtable<Long, M_Segment>();
 
