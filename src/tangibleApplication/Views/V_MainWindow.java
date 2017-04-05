@@ -5,8 +5,6 @@ import tangibleApplication.Controlers.C_FullScreen;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -44,7 +42,7 @@ public class V_MainWindow {
      * @return le TuioListener correspondant au JComponent
      */
     public TuioListener getTuioListener() {
-        return comp;
+        return comp.getControlClient();
     }
 
     /**
@@ -100,7 +98,7 @@ public class V_MainWindow {
             frame.pack();
             Insets insets = frame.getInsets();
             frame.setSize(width,height +insets.top);
-            //frame.setCursor(Cursor.getDefaultCursor());
+            frame.setCursor(Cursor.getDefaultCursor());
         }
 
         frame.setVisible(true);

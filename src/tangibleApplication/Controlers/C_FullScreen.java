@@ -39,7 +39,7 @@ public class C_FullScreen implements KeyListener{
             window.setFullscreen(!window.isFullscreen());
             window.showWindow();
         }
-        else if (e.getKeyCode()==KeyEvent.VK_V) window.getComp().setVerbose(!window.getComp().isVerbose());
+        else if (e.getKeyCode()==KeyEvent.VK_V) window.getComp().getControlClient().setVerbose(!window.getComp().getControlClient().isVerbose());
     }
 
     @Override

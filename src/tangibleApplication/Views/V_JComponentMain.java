@@ -9,19 +9,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Hashtable;
 
 /**
  * Created by Zachizac on 04/04/2017.
  */
-public class V_JComponentMain extends JComponent implements TuioListener {
+public class V_JComponentMain extends JComponent{
 
-    private Hashtable<Long,M_Point> actualObjectList = new Hashtable<Long, M_Point>(); //Liste des points présents actuellement
-    private Hashtable<Long,M_Point> global0bjectList = new Hashtable<Long, M_Point>(); //Liste de tous les points apparut au oours de cette instance
-    private Hashtable<Long, TuioCursor> cursorList = new Hashtable<Long,TuioCursor>();
-    private Hashtable<Long, M_Segment> segmentList = new Hashtable<Long, M_Segment>();
-
-    //private Hashtable<Long, TuioDemoBlob> blobList = new Hashtable<Long, TuioDemoBlob>();
 
     public static final int finger_size = 15;
     public static final int object_size = 20;
@@ -32,9 +25,6 @@ public class V_JComponentMain extends JComponent implements TuioListener {
     public static int width, height;
     private float scale = 1.0f;
     private C_Client controlClient;
-    private Long nbrSegments = new Long(0);
-
-    public boolean verbose = false;
 
     public V_JComponentMain(){
         super();
@@ -46,93 +36,6 @@ public class V_JComponentMain extends JComponent implements TuioListener {
         width = w;
         height = h;
         scale  = height/(float) V_JComponentMain.table_size;
-    }
-
-    public void addTuioObject(TuioObject tobj) {
-        if(tobj.getSymbolID() == id_segment){
-            controlClient.newSegment();
-        }
-        else {
-            M_Point point = new M_Point(tobj);
-            actualObjectList.put(tobj.getSessionID(), point);
-            if(!checkId(point))
-            global0bjectList.put(tobj.getSessionID(), point);
-        }
-        if (verbose)
-            System.out.println("add obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+") "+tobj.getX()+" "+tobj.getY()+" "+tobj.getAngle());
-    }
-
-    public void updateTuioObject(TuioObject tobj) {
-        if(tobj.getSymbolID() != id_segment) {
-            M_Point point = (M_Point) actualObjectList.get(tobj.getSessionID());
-            point.update(tobj);
-        }
-        if (verbose)
-            System.out.println("set obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+") "+tobj.getX()+" "+tobj.getY()+" "+tobj.getAngle()+" "+tobj.getMotionSpeed()+" "+tobj.getRotationSpeed()+" "+tobj.getMotionAccel()+" "+tobj.getRotationAccel());
-    }
-
-    public void removeTuioObject(TuioObject tobj) {
-        actualObjectList.remove(tobj.getSessionID());
-
-        if (verbose)
-            System.out.println("del obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+")");
-    }
-
-    public void addTuioCursor(TuioCursor tcur) {
-
-        if (!cursorList.containsKey(tcur.getSessionID())) {
-            cursorList.put(tcur.getSessionID(), tcur);
-            repaint();
-        }
-
-        if (verbose)
-            System.out.println("add cur "+tcur.getCursorID()+" ("+tcur.getSessionID()+") "+tcur.getX()+" "+tcur.getY());
-    }
-
-    public void updateTuioCursor(TuioCursor tcur) {
-
-        repaint();
-
-        if (verbose)
-            System.out.println("set cur "+tcur.getCursorID()+" ("+tcur.getSessionID()+") "+tcur.getX()+" "+tcur.getY()+" "+tcur.getMotionSpeed()+" "+tcur.getMotionAccel());
-    }
-
-    public void removeTuioCursor(TuioCursor tcur) {
-
-        cursorList.remove(tcur.getSessionID());
-        repaint();
-
-        if (verbose)
-            System.out.println("del cur "+tcur.getCursorID()+" ("+tcur.getSessionID()+")");
-    }
-
-    public void addTuioBlob(TuioBlob tblb) {
-    /*    TuioDemoBlob demo = new TuioDemoBlob(tblb);
-        blobList.put(tblb.getSessionID(),demo);
-*/
-        if (verbose)
-            System.out.println("add blb "+tblb.getBlobID()+" ("+tblb.getSessionID()+") "+tblb.getX()+" "+tblb.getY()+" "+tblb.getAngle());
-    }
-
-    public void updateTuioBlob(TuioBlob tblb) {
-
-  /*      TuioDemoBlob demo = (TuioDemoBlob)blobList.get(tblb.getSessionID());
-        demo.update(tblb);
-*/
-        if (verbose)
-            System.out.println("set blb "+tblb.getBlobID()+" ("+tblb.getSessionID()+") "+tblb.getX()+" "+tblb.getY()+" "+tblb.getAngle()+" "+tblb.getMotionSpeed()+" "+tblb.getRotationSpeed()+" "+tblb.getMotionAccel()+" "+tblb.getRotationAccel());
-    }
-
-    public void removeTuioBlob(TuioBlob tblb) {
-  /*      blobList.remove(tblb.getSessionID());
-*/
-        if (verbose)
-            System.out.println("del blb "+tblb.getBlobID()+" ("+tblb.getSessionID()+")");
-    }
-
-
-    public void refresh(TuioTime frameTime) {
-        repaint();
     }
 
     public void paint(Graphics g) {
@@ -151,7 +54,7 @@ public class V_JComponentMain extends JComponent implements TuioListener {
         int w = (int)Math.round(width-scale*finger_size/2.0f);
         int h = (int)Math.round(height-scale*finger_size/2.0f);
 
-        Enumeration<TuioCursor> cursors = cursorList.elements();
+        Enumeration<TuioCursor> cursors = controlClient.getCursorList().elements();
         while (cursors.hasMoreElements()) {
             TuioCursor tcur = cursors.nextElement();
             if (tcur==null) continue;
@@ -176,13 +79,13 @@ public class V_JComponentMain extends JComponent implements TuioListener {
         }
 
         // draw the objects
-        Enumeration<M_Point> objects = actualObjectList.elements();
+        Enumeration<M_Point> objects = controlClient.getActualObjectList().elements();
         while (objects.hasMoreElements()) {
             M_Point tobj = objects.nextElement();
             if (tobj!=null) tobj.paint(g2, width,height);
         }
 
-        Enumeration<M_Segment> segments = segmentList.elements();
+        Enumeration<M_Segment> segments = controlClient.getSegmentList().elements();
         while (segments.hasMoreElements()){
             M_Segment s = segments.nextElement();
             if(s!=null) s.paint(g2, width, height);
@@ -190,26 +93,8 @@ public class V_JComponentMain extends JComponent implements TuioListener {
 
     }
 
-    public boolean isVerbose() {
-        return verbose;
+    public C_Client getControlClient() {
+        return controlClient;
     }
 
-    public void setVerbose(boolean verbose) {
-        this.verbose = verbose;
-    }
-
-    public Hashtable<Long, M_Point> getObjectList() {
-        return actualObjectList;
-    }
-
-    public void addSegmentList(M_Segment segment) {
-        nbrSegments++;
-        this.segmentList.put(nbrSegments,segment);
-    }
-
-    public boolean checkId(M_Point point){
-        if(global0bjectList.contains(point))
-                return true;
-        return false;
-    }
 }
