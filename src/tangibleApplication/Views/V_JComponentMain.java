@@ -16,7 +16,8 @@ import java.util.Hashtable;
  */
 public class V_JComponentMain extends JComponent implements TuioListener {
 
-    private Hashtable<Long,M_Point> objectList = new Hashtable<Long, M_Point>();
+    private Hashtable<Long,M_Point> actualObjectList = new Hashtable<Long, M_Point>(); //Liste des points présents actuellement
+    private Hashtable<Long,M_Point> global0bjectList = new Hashtable<Long, M_Point>(); //Liste de tous les points apparru au oours de cette instance
     private Hashtable<Long, TuioCursor> cursorList = new Hashtable<Long,TuioCursor>();
     private Hashtable<Long, M_Segment> segmentList = new Hashtable<Long, M_Segment>();
 
@@ -49,12 +50,13 @@ public class V_JComponentMain extends JComponent implements TuioListener {
 
     public void addTuioObject(TuioObject tobj) {
         if(tobj.getSymbolID() == id_segment){
-            System.out.println("coucou je suis le tag special");
             controlClient.newSegment();
         }
         else {
-            M_Point demo = new M_Point(tobj);
-            objectList.put(tobj.getSessionID(), demo);
+            M_Point point = new M_Point(tobj);
+            actualObjectList.put(tobj.getSessionID(), point);
+            if(!checkId(point))
+            global0bjectList.put(tobj.getSessionID(), point);
         }
         if (verbose)
             System.out.println("add obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+") "+tobj.getX()+" "+tobj.getY()+" "+tobj.getAngle());
@@ -62,15 +64,15 @@ public class V_JComponentMain extends JComponent implements TuioListener {
 
     public void updateTuioObject(TuioObject tobj) {
         if(tobj.getSymbolID() != id_segment) {
-            M_Point demo = (M_Point) objectList.get(tobj.getSessionID());
-            demo.update(tobj);
+            M_Point point = (M_Point) actualObjectList.get(tobj.getSessionID());
+            point.update(tobj);
         }
         if (verbose)
             System.out.println("set obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+") "+tobj.getX()+" "+tobj.getY()+" "+tobj.getAngle()+" "+tobj.getMotionSpeed()+" "+tobj.getRotationSpeed()+" "+tobj.getMotionAccel()+" "+tobj.getRotationAccel());
     }
 
     public void removeTuioObject(TuioObject tobj) {
-        objectList.remove(tobj.getSessionID());
+        actualObjectList.remove(tobj.getSessionID());
 
         if (verbose)
             System.out.println("del obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+")");
@@ -174,7 +176,7 @@ public class V_JComponentMain extends JComponent implements TuioListener {
         }
 
         // draw the objects
-        Enumeration<M_Point> objects = objectList.elements();
+        Enumeration<M_Point> objects = actualObjectList.elements();
         while (objects.hasMoreElements()) {
             M_Point tobj = objects.nextElement();
             if (tobj!=null) tobj.paint(g2, width,height);
@@ -197,11 +199,17 @@ public class V_JComponentMain extends JComponent implements TuioListener {
     }
 
     public Hashtable<Long, M_Point> getObjectList() {
-        return objectList;
+        return actualObjectList;
     }
 
     public void addSegmentList(M_Segment segment) {
         nbrSegments++;
         this.segmentList.put(nbrSegments,segment);
+    }
+
+    public boolean checkId(M_Point point){
+        if(global0bjectList.contains(point))
+                return true;
+        return false;
     }
 }
