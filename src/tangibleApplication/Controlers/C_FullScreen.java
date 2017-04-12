@@ -1,11 +1,6 @@
 package tangibleApplication.Controlers;
 
-import tangibleApplication.Views.V_JComponentMain;
 import tangibleApplication.Views.V_MainWindow;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -39,7 +34,7 @@ public class C_FullScreen implements KeyListener{
             window.setFullscreen(!window.isFullscreen());
             window.showWindow();
         }
-        else if (e.getKeyCode()==KeyEvent.VK_V) window.getComp().getControlClient().setVerbose(!window.getComp().getControlClient().isVerbose());
+        else if (e.getKeyCode()==KeyEvent.VK_V) window.getComp().getTuioListener().setVerbose(!window.getComp().getTuioListener().isVerbose());
     }
 
     @Override

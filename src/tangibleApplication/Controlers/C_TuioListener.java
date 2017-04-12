@@ -11,7 +11,7 @@ import java.util.Hashtable;
 /**
  * Created by Zachizac on 04/04/2017.
  */
-public class C_Client implements TuioListener {
+public class C_TuioListener implements TuioListener {
 
     private Hashtable<Long,M_Point> actualObjectList = new Hashtable<Long, M_Point>(); //Liste des points présents actuellement
     private Hashtable<Long,M_Point> global0bjectList = new Hashtable<Long, M_Point>(); //Liste de tous les points apparut au oours de cette instance
@@ -22,7 +22,7 @@ public class C_Client implements TuioListener {
     private boolean verbose = false;
     private Long nbrSegments = new Long(0);
 
-    public C_Client(V_JComponentMain comp){
+    public C_TuioListener(V_JComponentMain comp){
         this.comp = comp;
     }
 

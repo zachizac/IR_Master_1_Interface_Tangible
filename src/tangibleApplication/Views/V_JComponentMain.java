@@ -1,7 +1,7 @@
 package tangibleApplication.Views;
 
 import TUIO.*;
-import tangibleApplication.Controlers.C_Client;
+import tangibleApplication.Controlers.C_TuioListener;
 import tangibleApplication.Models.M_Point;
 import tangibleApplication.Models.M_Segment;
 
@@ -24,11 +24,11 @@ public class V_JComponentMain extends JComponent{
 
     public static int width, height;
     private float scale = 1.0f;
-    private C_Client controlClient;
+    private C_TuioListener controlClient;
 
     public V_JComponentMain(){
         super();
-        controlClient = new C_Client(this);
+        controlClient = new C_TuioListener(this);
     }
 
     public void setSize(int w, int h) {
@@ -93,7 +93,7 @@ public class V_JComponentMain extends JComponent{
 
     }
 
-    public C_Client getControlClient() {
+    public C_TuioListener getTuioListener() {
         return controlClient;
     }
 

@@ -42,7 +42,7 @@ public class V_MainWindow {
      * @return le TuioListener correspondant au JComponent
      */
     public TuioListener getTuioListener() {
-        return comp.getControlClient();
+        return comp.getTuioListener();
     }
 
     /**
