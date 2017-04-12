@@ -15,8 +15,8 @@ import java.awt.image.BufferedImage;
  */
 public class V_MainWindow {
 
-    private final int window_width  = 640;
-    private final int window_height = 480;
+    private final int window_width  = 1024;
+    private final int window_height = 768;
 
     private boolean fullscreen = false;
 

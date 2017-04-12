@@ -42,7 +42,9 @@ public class C_Client implements TuioListener {
 
     public void updateTuioObject(TuioObject tobj) {
         if(tobj.getSymbolID() != comp.id_segment) {
-            M_Point point = (M_Point) actualObjectList.get(tobj.getSessionID());
+            M_Point point = (M_Point) actualObjectList.get(tobj.getSessionID()); //on recup le pts de la liste actuelle et on l update
+            point.update(tobj);
+            point = (M_Point) global0bjectList.get(tobj.getSessionID()); // on recup le point dans la liste globale et on l update
             point.update(tobj);
         }
         if (verbose)
