@@ -3,7 +3,7 @@ package tangibleApplication.Controlers;
 import TUIO.*;
 import tangibleApplication.Models.M_Point;
 import tangibleApplication.Models.M_Segment;
-import tangibleApplication.Views.V_JComponentMain;
+import tangibleApplication.Views.V_JPanelMain;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -18,11 +18,11 @@ public class C_TuioListener implements TuioListener {
     private Hashtable<Long, TuioCursor> cursorList = new Hashtable<Long,TuioCursor>();
     private Hashtable<Long, M_Segment> segmentList = new Hashtable<Long, M_Segment>();
 
-    V_JComponentMain comp;
+    V_JPanelMain comp;
     private boolean verbose = false;
     private Long nbrSegments = new Long(0);
 
-    public C_TuioListener(V_JComponentMain comp){
+    public C_TuioListener(V_JPanelMain comp){
         this.comp = comp;
     }
 

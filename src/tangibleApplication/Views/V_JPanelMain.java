@@ -6,6 +6,7 @@ import tangibleApplication.Models.M_Point;
 import tangibleApplication.Models.M_Segment;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -13,7 +14,7 @@ import java.util.Enumeration;
 /**
  * Created by Zachizac on 04/04/2017.
  */
-public class V_JComponentMain extends JComponent{
+public class V_JPanelMain extends JPanel{
 
 
     public static final int finger_size = 15;
@@ -21,13 +22,16 @@ public class V_JComponentMain extends JComponent{
     public static final int table_size = 760;
     public static final int id_segment = 10;
 
+    private final int panelMenu_width = 150;
 
     public static int width, height;
     private float scale = 1.0f;
     private C_TuioListener controlClient;
 
-    public V_JComponentMain(){
+
+    public V_JPanelMain(){
         super();
+        this.setBorder(new LineBorder(Color.black, 5));
         controlClient = new C_TuioListener(this);
     }
 
@@ -35,10 +39,11 @@ public class V_JComponentMain extends JComponent{
         super.setSize(w,h);
         width = w;
         height = h;
-        scale  = height/(float) V_JComponentMain.table_size;
+        scale  = height/(float) V_JPanelMain.table_size;
     }
 
     public void paint(Graphics g) {
+
         update(g);
     }
 
@@ -48,8 +53,21 @@ public class V_JComponentMain extends JComponent{
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-        g2.setColor(Color.white);
-        g2.fillRect(0,0,width,height);
+        //g2.setColor(Color.green);
+        g2.fillRect(5,5,width-20,height-10);
+
+        g2.setStroke(new BasicStroke(3));
+        g2.setColor(Color.black);
+        g2.drawLine(panelMenu_width,0, panelMenu_width, height );
+
+        for(int i=1;i<4;i++){
+            g2.drawLine(0, i*(height/4), panelMenu_width, i*(height/4));
+        }
+        Font font = new Font("Courier", Font.BOLD,12);
+        g2.setFont(font);
+        g2.drawString("Zone point", 30, height/8);
+        g2.drawString("Zone segment", 30, 3*(height/8));
+        g2.setStroke(new BasicStroke(1));
 
         int w = (int)Math.round(width-scale*finger_size/2.0f);
         int h = (int)Math.round(height-scale*finger_size/2.0f);
@@ -69,7 +87,6 @@ public class V_JComponentMain extends JComponent{
                     current_point = next_point;
                 }
             }
-
             // draw the finger tip
             g2.setPaint(Color.lightGray);
             int s = (int)(scale*finger_size);
@@ -77,14 +94,12 @@ public class V_JComponentMain extends JComponent{
             g2.setPaint(Color.black);
             g2.drawString(tcur.getCursorID()+"",current_point.getScreenX(w),current_point.getScreenY(h));
         }
-
         // draw the objects
         Enumeration<M_Point> objects = controlClient.getActualObjectList().elements();
         while (objects.hasMoreElements()) {
             M_Point tobj = objects.nextElement();
             if (tobj!=null) tobj.paint(g2, width,height);
         }
-
         Enumeration<M_Segment> segments = controlClient.getSegmentList().elements();
         while (segments.hasMoreElements()){
             M_Segment s = segments.nextElement();
@@ -96,5 +111,6 @@ public class V_JComponentMain extends JComponent{
     public C_TuioListener getTuioListener() {
         return controlClient;
     }
+
 
 }

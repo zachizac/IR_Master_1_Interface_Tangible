@@ -1,11 +1,9 @@
 package tangibleApplication.Models;
 
 
-import TUIO.TuioObject;
-import tangibleApplication.Views.V_JComponentMain;
+import tangibleApplication.Views.V_JPanelMain;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 
 /**
@@ -24,7 +22,7 @@ public class M_Segment {
      */
     public M_Segment(M_Point p1, M_Point p2) {
 
-        int size = V_JComponentMain.object_size/2;
+        int size = V_JPanelMain.object_size/2;
         this.p1 = p1;
         this.p2 = p2;
         line = new Line2D.Float(p1.getX(),p1.getY(),p2.getX(),p2.getY());

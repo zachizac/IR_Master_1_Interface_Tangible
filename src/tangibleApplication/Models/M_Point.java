@@ -1,7 +1,7 @@
 package tangibleApplication.Models;
 
 import TUIO.TuioObject;
-import tangibleApplication.Views.V_JComponentMain;
+import tangibleApplication.Views.V_JPanelMain;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -16,7 +16,7 @@ public class M_Point extends TuioObject {
 
         public M_Point(TuioObject tobj) {
             super(tobj);
-            int size = V_JComponentMain.object_size/2;
+            int size = V_JPanelMain.object_size/2;
             point = new Ellipse2D.Float(-size/2,-size/2,size,size);
 
             AffineTransform transform = new AffineTransform();
@@ -29,7 +29,7 @@ public class M_Point extends TuioObject {
 
             float Xpos = xpos*width;
             float Ypos = ypos*height;
-            float scale = height/(float) V_JComponentMain.table_size;
+            float scale = height/(float) V_JPanelMain.table_size;
 
             AffineTransform trans = new AffineTransform();
             trans.translate(-xpos,-ypos);

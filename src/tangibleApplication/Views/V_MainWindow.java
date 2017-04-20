@@ -17,10 +17,11 @@ public class V_MainWindow {
 
     private final int window_width  = 1024;
     private final int window_height = 768;
+    private final int panelMenu_width = 100;
 
     private boolean fullscreen = false;
 
-    private V_JComponentMain comp;
+    private V_JPanelMain comp;
     private JFrame frame;
     private GraphicsDevice device;
     private Cursor invisibleCursor;
@@ -30,7 +31,7 @@ public class V_MainWindow {
      */
     public V_MainWindow() {
         //on cree le component
-        comp = new V_JComponentMain();
+        comp = new V_JPanelMain();
         device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         invisibleCursor = Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "invisible cursor");
         setupWindow();
@@ -51,18 +52,33 @@ public class V_MainWindow {
     public void setupWindow() {
 
         frame = new JFrame();
-        frame.add(comp);
-
+        frame.setContentPane(comp);
         frame.setTitle("TangibleApplication");
         frame.setResizable(false);
-
         frame.addWindowListener( new WindowAdapter() { public void windowClosing(WindowEvent evt) {
             System.exit(0);
         } });
-
         frame.addKeyListener( new C_FullScreen(this));
-
     }
+
+    /*public JPanel setupPanel(){
+
+        JPanel panelGlobal = new JPanel();
+        JPanel panelMenu = new JPanel();
+        JPanel panelDessin = new JPanel();
+
+        panelGlobal.setPreferredSize(new Dimension(window_width, window_height));
+        panelGlobal.setLayout(new BorderLayout());
+
+        panelMenu.setPreferredSize(new Dimension(panelMenu_width, window_height));
+        panelDessin.setPreferredSize(new Dimension(window_width - panelMenu_width, window_height));
+
+        panelGlobal.add(panelDessin, BorderLayout.CENTER);
+        panelGlobal.add(panelMenu, BorderLayout.WEST);
+
+
+        return panelGlobal;
+    }*/
 
     /**
      * Methode de destruction de la fenetre pour switcher en mode plein ecran
@@ -113,7 +129,7 @@ public class V_MainWindow {
         this.fullscreen = fullscreen;
     }
 
-    public V_JComponentMain getComp() {
+    public V_JPanelMain getComp() {
         return comp;
     }
 }
