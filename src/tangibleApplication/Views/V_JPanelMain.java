@@ -6,6 +6,7 @@ import tangibleApplication.Models.M_Point;
 import tangibleApplication.Models.M_Segment;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ public class V_JPanelMain extends JPanel{
     public static final int table_size = 760;
     public static final int id_segment = 10;
 
+    public static final Border BORDER = new LineBorder(Color.black, 5);
+
     private final int panelMenu_width = 150;
 
     public static int width, height;
@@ -31,7 +34,7 @@ public class V_JPanelMain extends JPanel{
 
     public V_JPanelMain(){
         super();
-        this.setBorder(new LineBorder(Color.black, 5));
+        this.setBorder(BORDER);
         controlClient = new C_TuioListener(this);
     }
 
@@ -43,7 +46,6 @@ public class V_JPanelMain extends JPanel{
     }
 
     public void paint(Graphics g) {
-
         update(g);
     }
 
@@ -53,7 +55,7 @@ public class V_JPanelMain extends JPanel{
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-        //g2.setColor(Color.green);
+        g2.setColor(Color.green);
         g2.fillRect(5,5,width-20,height-10);
 
         g2.setStroke(new BasicStroke(3));
@@ -105,6 +107,8 @@ public class V_JPanelMain extends JPanel{
             M_Segment s = segments.nextElement();
             if(s!=null) s.paint(g2, width, height);
         }
+
+        super.paintBorder(g2);
 
     }
 
