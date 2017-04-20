@@ -97,7 +97,7 @@ public class V_JPanelMain extends JPanel{
             g2.drawString(tcur.getCursorID()+"",current_point.getScreenX(w),current_point.getScreenY(h));
         }
         // draw the objects
-        Enumeration<M_Point> objects = controlClient.getActualObjectList().elements();
+        Enumeration<M_Point> objects = controlClient.getGlobalObjectList().elements();
         while (objects.hasMoreElements()) {
             M_Point tobj = objects.nextElement();
             if(managePointDisplay(tobj) && (tobj!=null))
