@@ -55,8 +55,8 @@ public class V_JPanelMain extends JPanel{
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-        g2.setColor(Color.green);
-        g2.fillRect(5,5,width-20,height-10);
+        g2.setColor(Color.white);
+        g2.fillRect(5,5,width-10,height-10);
 
         g2.setStroke(new BasicStroke(3));
         g2.setColor(Color.black);
@@ -100,7 +100,11 @@ public class V_JPanelMain extends JPanel{
         Enumeration<M_Point> objects = controlClient.getActualObjectList().elements();
         while (objects.hasMoreElements()) {
             M_Point tobj = objects.nextElement();
-            if (tobj!=null) tobj.paint(g2, width,height);
+            if(managePointDisplay(tobj) && (tobj!=null))
+                tobj.paint(g2, width,height);
+
+            System.out.println(tobj.getX()+ "\n");
+            System.out.println(tobj.getY());
         }
         Enumeration<M_Segment> segments = controlClient.getSegmentList().elements();
         while (segments.hasMoreElements()){
@@ -112,6 +116,21 @@ public class V_JPanelMain extends JPanel{
 
     }
 
+    public boolean managePointDisplay(M_Point point){
+
+        float coordX = point.getX();
+        float coordY = point.getY();
+        int symbolID = point.getSymbolID();
+
+        if(coordX < 0.16 && symbolID == 10){
+            return true;
+        }
+        else if(coordX > 0.18 && symbolID != 10){
+            return true;
+        }
+
+        return false;
+    }
     public C_TuioListener getTuioListener() {
         return controlClient;
     }

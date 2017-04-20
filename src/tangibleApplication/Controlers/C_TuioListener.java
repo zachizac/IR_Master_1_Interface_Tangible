@@ -26,7 +26,7 @@ public class C_TuioListener implements TuioListener {
         this.comp = comp;
     }
 
-    public void addTuioObject(TuioObject tobj) {
+    /*public void addTuioObject(TuioObject tobj) {
         if(tobj.getSymbolID() == comp.id_segment){
             newSegment();
         }
@@ -38,15 +38,24 @@ public class C_TuioListener implements TuioListener {
         }
         if (verbose)
             System.out.println("add obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+") "+tobj.getX()+" "+tobj.getY()+" "+tobj.getAngle());
-    }
+    }*/
 
+    public void addTuioObject(TuioObject tobj) {
+
+        M_Point point = new M_Point(tobj);
+        actualObjectList.put(tobj.getSessionID(), point);
+        if(!checkId(point))
+            global0bjectList.put(tobj.getSessionID(), point);
+        if (verbose)
+            System.out.println("add obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+") "+tobj.getX()+" "+tobj.getY()+" "+tobj.getAngle());
+    }
     public void updateTuioObject(TuioObject tobj) {
-        if(tobj.getSymbolID() != comp.id_segment) {
+       // if(tobj.getSymbolID() != comp.id_segment) {
             M_Point point = (M_Point) actualObjectList.get(tobj.getSessionID()); //on recup le pts de la liste actuelle et on l update
             point.update(tobj);
             point = (M_Point) global0bjectList.get(tobj.getSessionID()); // on recup le point dans la liste globale et on l update
             point.update(tobj);
-        }
+       // }
         if (verbose)
             System.out.println("set obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+") "+tobj.getX()+" "+tobj.getY()+" "+tobj.getAngle()+" "+tobj.getMotionSpeed()+" "+tobj.getRotationSpeed()+" "+tobj.getMotionAccel()+" "+tobj.getRotationAccel());
     }
