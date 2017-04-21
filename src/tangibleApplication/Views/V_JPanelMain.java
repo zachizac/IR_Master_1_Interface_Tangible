@@ -21,15 +21,18 @@ public class V_JPanelMain extends JPanel{
     public static final int finger_size = 15;
     public static final int object_size = 20;
     public static final int table_size = 760;
-    public static final int id_segment = 10;
-
+    public static final int id_tagAction = 10;
     public static final Border BORDER = new LineBorder(Color.black, 5);
+    public static int width, height;
+    public int actifMenu;
 
+    private final int nbMenu = 5;
     private final int panelMenu_width = 150;
 
-    public static int width, height;
+
     private float scale = 1.0f;
     private C_TuioListener controlClient;
+
 
 
     public V_JPanelMain(){
@@ -62,13 +65,15 @@ public class V_JPanelMain extends JPanel{
         g2.setColor(Color.black);
         g2.drawLine(panelMenu_width,0, panelMenu_width, height );
 
-        for(int i=1;i<4;i++){
-            g2.drawLine(0, i*(height/4), panelMenu_width, i*(height/4));
+        for(int i=1;i<nbMenu;i++){
+            g2.drawLine(0, i*(height/nbMenu), panelMenu_width, i*(height/nbMenu));
         }
         Font font = new Font("Courier", Font.BOLD,12);
         g2.setFont(font);
-        g2.drawString("Zone point", 30, height/8);
-        g2.drawString("Zone segment", 30, 3*(height/8));
+        g2.drawString("Zone point", 30, height/(nbMenu*2));
+        g2.drawString("Zone segment", 30, 3*(height/(nbMenu*2)));
+        g2.drawString("Zone polygone", 30, 5*(height/(nbMenu*2)));
+
         g2.setStroke(new BasicStroke(1));
 
         int w = (int)Math.round(width-scale*finger_size/2.0f);
@@ -97,14 +102,19 @@ public class V_JPanelMain extends JPanel{
             g2.drawString(tcur.getCursorID()+"",current_point.getScreenX(w),current_point.getScreenY(h));
         }
         // draw the objects
-        Enumeration<M_Point> objects = controlClient.getGlobalObjectList().elements();
+        Enumeration<M_Point> objects = controlClient.getGlobal0bjectList().elements();
         while (objects.hasMoreElements()) {
             M_Point tobj = objects.nextElement();
-            if(managePointDisplay(tobj) && (tobj!=null))
-                tobj.paint(g2, width,height);
+            if(managePointDisplay(tobj) && (tobj!=null)) {
+                if (tobj.getSymbolID() == id_tagAction) {
 
-            System.out.println(tobj.getX()+ "\n");
-            System.out.println(tobj.getY());
+                    actifMenu = getMenuActived(tobj);
+                    System.out.println("menu activé "+ actifMenu);
+                    showMenuActived(actifMenu, g2);
+                    tobj.paint(g2, width, height);
+
+                }
+            }
         }
         Enumeration<M_Segment> segments = controlClient.getSegmentList().elements();
         while (segments.hasMoreElements()){
@@ -116,20 +126,57 @@ public class V_JPanelMain extends JPanel{
 
     }
 
+    /**
+     * Fonction qui gère l'affichage des points en fonction de leur position
+     * @param point le point concerné
+     * @return on affiche le point si le resultat est true
+     */
     public boolean managePointDisplay(M_Point point){
 
-        float coordX = point.getX();
-        float coordY = point.getY();
+        float coordX = point.getX()*width;
+        float coordY = point.getY()*height;
         int symbolID = point.getSymbolID();
 
-        if(coordX < 0.16 && symbolID == 10){
+        if(coordX < 150 && symbolID == id_tagAction){
             return true;
         }
-        else if(coordX > 0.18 && symbolID != 10){
+        else if(coordX > 150 && symbolID != id_tagAction){
             return true;
         }
-
         return false;
+    }
+
+    public int getMenuActived(M_Point point){
+
+        boolean menuFounded = false;
+        float coordY = point.getY()*height;
+        int menuHeight = height/nbMenu;
+        int actifMenu = 0;
+
+        while(!menuFounded){
+            for(int i = 1; i<= nbMenu; i++){
+                if(coordY < menuHeight*i && coordY > menuHeight* (i-1)){
+                    menuFounded = true;
+                    actifMenu = i;
+                }
+            }
+        }
+        return actifMenu;
+    }
+
+    public void showMenuActived(int menuActived, Graphics g){
+
+        int menuHeight = height/nbMenu;
+        g.setColor(Color.lightGray);
+        g.fillRect(5, ((menuActived-1)*menuHeight)+2,panelMenu_width-6,menuHeight-3); //demande pas pourquoi ces valeurs
+        g.setColor(Color.black);
+        Font font = new Font("Courier", Font.BOLD,12);
+        g.setFont(font);
+        g.drawString("Zone point", 30, height/(nbMenu*2));
+        g.drawString("Zone segment", 30, 3*(height/(nbMenu*2)));
+        g.drawString("Zone polygone", 30, 5*(height/(nbMenu*2)));
+
+
     }
     public C_TuioListener getTuioListener() {
         return controlClient;

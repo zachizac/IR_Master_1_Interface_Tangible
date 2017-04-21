@@ -40,7 +40,7 @@ public class M_Point extends TuioObject {
             g.setPaint(Color.black);
             g.fill(s);
             g.setPaint(Color.white);
-            g.drawString(symbol_id+"",Xpos-10,Ypos);
+           // g.drawString(symbol_id+"",Xpos-10,Ypos);
         }
 
         public void update(TuioObject tobj) {

@@ -61,25 +61,6 @@ public class V_MainWindow {
         frame.addKeyListener( new C_FullScreen(this));
     }
 
-    /*public JPanel setupPanel(){
-
-        JPanel panelGlobal = new JPanel();
-        JPanel panelMenu = new JPanel();
-        JPanel panelDessin = new JPanel();
-
-        panelGlobal.setPreferredSize(new Dimension(window_width, window_height));
-        panelGlobal.setLayout(new BorderLayout());
-
-        panelMenu.setPreferredSize(new Dimension(panelMenu_width, window_height));
-        panelDessin.setPreferredSize(new Dimension(window_width - panelMenu_width, window_height));
-
-        panelGlobal.add(panelDessin, BorderLayout.CENTER);
-        panelGlobal.add(panelMenu, BorderLayout.WEST);
-
-
-        return panelGlobal;
-    }*/
-
     /**
      * Methode de destruction de la fenetre pour switcher en mode plein ecran
      */
@@ -116,7 +97,6 @@ public class V_MainWindow {
             frame.setSize(width,height +insets.top);
             frame.setCursor(Cursor.getDefaultCursor());
         }
-
         frame.setVisible(true);
         frame.repaint();
     }
