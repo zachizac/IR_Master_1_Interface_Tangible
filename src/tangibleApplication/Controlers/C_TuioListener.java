@@ -5,8 +5,7 @@ import tangibleApplication.Models.M_Point;
 import tangibleApplication.Models.M_Segment;
 import tangibleApplication.Views.V_JPanelMain;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.*;
 
 /**
  * Created by Zachizac on 04/04/2017.
@@ -14,7 +13,7 @@ import java.util.Hashtable;
 public class C_TuioListener implements TuioListener {
 
     private Hashtable<Long,M_Point> actualObjectList = new Hashtable<Long, M_Point>(); //Liste des points présents actuellement
-    private Hashtable<Long,M_Point> global0bjectList = new Hashtable<Long, M_Point>(); //Liste de tous les points apparut au oours de cette instance
+    private Hashtable<Long,M_Point> globalObjectList = new Hashtable<Long, M_Point>(); //Liste de tous les points apparut au oours de cette instance
     private Hashtable<Long, TuioCursor> cursorList = new Hashtable<Long,TuioCursor>();
     private Hashtable<Long, M_Segment> segmentList = new Hashtable<Long, M_Segment>();
 
@@ -34,7 +33,7 @@ public class C_TuioListener implements TuioListener {
             M_Point point = new M_Point(tobj);
             actualObjectList.put(tobj.getSessionID(), point);
             if(!checkId(point))
-                global0bjectList.put(tobj.getSessionID(), point);
+                globalObjectList.put(tobj.getSessionID(), point);
         }
         if (verbose)
             System.out.println("add obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+") "+tobj.getX()+" "+tobj.getY()+" "+tobj.getAngle());
@@ -43,17 +42,25 @@ public class C_TuioListener implements TuioListener {
     public void addTuioObject(TuioObject tobj) {
 
         M_Point point = new M_Point(tobj);
+
+        if(!checkId(tobj))
+            globalObjectList.put(tobj.getSessionID(), point);
+        else{
+            removeId(tobj);
+            globalObjectList.put(tobj.getSessionID(), point);
+            M_Point pointModif = (M_Point) globalObjectList.get(tobj.getSessionID());
+            pointModif.update(tobj);
+        }
+
         actualObjectList.put(tobj.getSessionID(), point);
-        if(!checkId(point))
-            global0bjectList.put(tobj.getSessionID(), point);
+
         if (verbose)
             System.out.println("add obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+") "+tobj.getX()+" "+tobj.getY()+" "+tobj.getAngle());
     }
     public void updateTuioObject(TuioObject tobj) {
        // if(tobj.getSymbolID() != comp.id_segment) {
-            M_Point point = (M_Point) actualObjectList.get(tobj.getSessionID()); //on recup le pts de la liste actuelle et on l update
-            point.update(tobj);
-            point = (M_Point) global0bjectList.get(tobj.getSessionID()); // on recup le point dans la liste globale et on l update
+
+            M_Point point = (M_Point) globalObjectList.get(tobj.getSessionID()); // on recup le point dans la liste globale et on l update
             point.update(tobj);
        // }
         if (verbose)
@@ -61,7 +68,15 @@ public class C_TuioListener implements TuioListener {
     }
 
     public void removeTuioObject(TuioObject tobj) {
-        actualObjectList.remove(tobj.getSessionID());
+
+        Timer timer = new Timer();
+
+        timer.schedule(new TimerTask(){
+            @Override
+            public void run(){
+                //if(!checkId(tobj)) globalObjectList.remove(tobj.getSessionID());
+            }
+        }, 3*1000);
 
         if (verbose)
             System.out.println("del obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+")");
@@ -130,18 +145,36 @@ public class C_TuioListener implements TuioListener {
         return actualObjectList;
     }
 
-    public Hashtable<Long, M_Point> getGlobal0bjectList() {
-        return global0bjectList;
+    public Hashtable<Long, M_Point> getGlobalObjectList() {
+        return globalObjectList;
     }
 
     public Hashtable<Long, M_Segment> getSegmentList() {
         return segmentList;
     }
 
-    public boolean checkId(M_Point point){
-        if(global0bjectList.contains(point))
-            return true;
+    public boolean checkId(TuioObject tobj){
+
+        Iterator itKey = globalObjectList.keySet().iterator();
+        while(itKey.hasNext()) {
+            Object o = itKey.next();
+            if (globalObjectList.get(o).getSymbolID() == tobj.getSymbolID()) {
+                return true;
+            }
+        }
         return false;
+    }
+
+    public void removeId(TuioObject tobj){
+
+        Iterator itKey = globalObjectList.keySet().iterator();
+        while(itKey.hasNext()){
+            Object o = itKey.next();
+            if(globalObjectList.get(o).getSymbolID()== tobj.getSymbolID()){
+                globalObjectList.remove(o);
+                return;
+            }
+        }
     }
 
     public void addTuioBlob(TuioBlob tblb) {}

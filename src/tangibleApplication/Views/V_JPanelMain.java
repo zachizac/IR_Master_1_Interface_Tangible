@@ -102,7 +102,7 @@ public class V_JPanelMain extends JPanel{
             g2.drawString(tcur.getCursorID()+"",current_point.getScreenX(w),current_point.getScreenY(h));
         }
         // draw the objects
-        Enumeration<M_Point> objects = controlClient.getGlobal0bjectList().elements();
+        Enumeration<M_Point> objects = controlClient.getGlobalObjectList().elements();
         while (objects.hasMoreElements()) {
             M_Point tobj = objects.nextElement();
             if(managePointDisplay(tobj) && (tobj!=null)) {
@@ -114,6 +114,7 @@ public class V_JPanelMain extends JPanel{
                     tobj.paint(g2, width, height);
 
                 }
+                else tobj.paint(g2, width, height);
             }
         }
         Enumeration<M_Segment> segments = controlClient.getSegmentList().elements();
