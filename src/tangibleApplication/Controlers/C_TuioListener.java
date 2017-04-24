@@ -17,9 +17,12 @@ public class C_TuioListener implements TuioListener {
     private Hashtable<Long, TuioCursor> cursorList = new Hashtable<Long,TuioCursor>();
     private Hashtable<Long, M_Segment> segmentList = new Hashtable<Long, M_Segment>();
 
+    int incrPointId = 1;
+
     V_JPanelMain comp;
     private boolean verbose = false;
     private Long nbrSegments = new Long(0);
+
 
     public C_TuioListener(V_JPanelMain comp){
         this.comp = comp;
@@ -43,24 +46,25 @@ public class C_TuioListener implements TuioListener {
 
         M_Point point = new M_Point(tobj);
 
-        if(!checkId(tobj))
-            globalObjectList.put(tobj.getSessionID(), point);
-        else{
-            removeId(tobj);
-            globalObjectList.put(tobj.getSessionID(), point);
-            M_Point pointModif = (M_Point) globalObjectList.get(tobj.getSessionID());
-            pointModif.update(tobj);
-        }
-
         actualObjectList.put(tobj.getSessionID(), point);
+
+        if(checkId(tobj, globalObjectList)) {
+            removeId(tobj, globalObjectList);
+            globalObjectList.put(tobj.getSessionID(), point);
+            M_Point pointModif = (M_Point) actualObjectList.get(tobj.getSessionID());
+            pointModif.update(tobj);
+        } else {
+            globalObjectList.put(tobj.getSessionID(), point);
+        }
 
         if (verbose)
             System.out.println("add obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+") "+tobj.getX()+" "+tobj.getY()+" "+tobj.getAngle());
     }
+
     public void updateTuioObject(TuioObject tobj) {
        // if(tobj.getSymbolID() != comp.id_segment) {
 
-            M_Point point = (M_Point) globalObjectList.get(tobj.getSessionID()); // on recup le point dans la liste globale et on l update
+            M_Point point = (M_Point) actualObjectList.get(tobj.getSessionID()); // on recup le point dans la liste globale et on l update
             point.update(tobj);
        // }
         if (verbose)
@@ -69,14 +73,20 @@ public class C_TuioListener implements TuioListener {
 
     public void removeTuioObject(TuioObject tobj) {
 
+        removeId(tobj, actualObjectList);
+
         Timer timer = new Timer();
 
         timer.schedule(new TimerTask(){
             @Override
             public void run(){
-                //if(!checkId(tobj)) globalObjectList.remove(tobj.getSessionID());
+                if(!checkId(tobj, actualObjectList)){
+                    setSymbolId(tobj, globalObjectList);
+                }
+                timer.cancel();
             }
         }, 3*1000);
+
 
         if (verbose)
             System.out.println("del obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+")");
@@ -153,27 +163,45 @@ public class C_TuioListener implements TuioListener {
         return segmentList;
     }
 
-    public boolean checkId(TuioObject tobj){
+    public boolean checkId(TuioObject tobj, Hashtable<Long,M_Point> h){
 
-        Iterator itKey = globalObjectList.keySet().iterator();
+        Iterator itKey = h.keySet().iterator();
+        Object o;
         while(itKey.hasNext()) {
-            Object o = itKey.next();
-            if (globalObjectList.get(o).getSymbolID() == tobj.getSymbolID()) {
+            o = itKey.next();
+            if (h.get(o).getSymbolID() == tobj.getSymbolID()) {
                 return true;
             }
         }
         return false;
     }
 
-    public void removeId(TuioObject tobj){
+    public void removeId(TuioObject tobj, Hashtable<Long,M_Point> h){
 
-        Iterator itKey = globalObjectList.keySet().iterator();
+        Iterator itKey = h.keySet().iterator();
+        Object o;
         while(itKey.hasNext()){
-            Object o = itKey.next();
-            if(globalObjectList.get(o).getSymbolID()== tobj.getSymbolID()){
-                globalObjectList.remove(o);
+            o = itKey.next();
+            if(h.get(o).getSymbolID()== tobj.getSymbolID()){
+                h.remove(o);
                 return;
             }
+        }
+    }
+
+    public void setSymbolId(TuioObject tobj, Hashtable<Long,M_Point> h){
+
+        Iterator itKey = h.keySet().iterator();
+        Object o;
+        while(itKey.hasNext()){
+            o = itKey.next();
+            if(h.get(o).getSymbolID() == tobj.getSymbolID()){
+                h.get(o).setSymbolID(-incrPointId);
+                incrPointId++;
+                System.out.println(h.get(o).getSymbolID());
+                return;
+            }
+
         }
     }
 

@@ -18,6 +18,8 @@
 
 package TUIO;
 
+import java.util.Timer;
+
 /**
  * The TuioObject class encapsulates /tuio/2Dobj TUIO objects.
  *
@@ -46,7 +48,7 @@ public class TuioObject extends TuioContainer {
 	 * Defines the ROTATING state.
 	 */ 
 	public static final int TUIO_ROTATING = 5;
-	
+
 	/**
 	 * This constructor takes a TuioTime argument and assigns it along with the provided 
 	 * Session ID, Symbol ID, X and Y coordinate and angle to the newly created TuioObject.
@@ -203,6 +205,14 @@ public class TuioObject extends TuioContainer {
 	 */
 	public int getSymbolID() {
 		return symbol_id;
+	}
+
+	/**
+	 * Set the symbol ID of this TuioObject.
+	 * @param s new symbol ID
+	 */
+	public void setSymbolID(int s){
+		this.symbol_id = s;
 	}
 		
 	/**
