@@ -4,8 +4,8 @@ import TUIO.*;
 import tangibleApplication.Models.M_Point;
 import tangibleApplication.Models.M_Segment;
 import tangibleApplication.Views.V_JPanelMain;
-
 import java.util.*;
+import static tangibleApplication.Views.V_JPanelMain.id_tagAction;
 
 /**
  * Created by Zachizac on 04/04/2017.
@@ -17,11 +17,15 @@ public class C_TuioListener implements TuioListener {
     private Hashtable<Long, TuioCursor> cursorList = new Hashtable<Long,TuioCursor>();
     private Hashtable<Long, M_Segment> segmentList = new Hashtable<Long, M_Segment>();
 
+    private M_Point [] pointSegment = {null, null};
+
     int incrPointId = 1;
 
     V_JPanelMain comp;
     private boolean verbose = false;
     private Long nbrSegments = new Long(0);
+
+    int activeMenu;
 
 
     public C_TuioListener(V_JPanelMain comp){
@@ -75,21 +79,35 @@ public class C_TuioListener implements TuioListener {
     public void removeTuioObject(TuioObject tobj) {
 
         removeId(tobj, actualObjectList);
-        setDispa(tobj, globalObjectList, System.currentTimeMillis());
 
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask(){
-            @Override
-            public void run(){
-                if(!checkId(tobj, actualObjectList) && dispaTime(tobj, globalObjectList)){
-                    setSymbolId(tobj, globalObjectList);
-                    timer.cancel();
+        if(tobj.getSymbolID()!=id_tagAction) {
+            setDispa(tobj, globalObjectList, System.currentTimeMillis());
+
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if (!checkId(tobj, actualObjectList) && dispaTime(tobj, globalObjectList)) {
+                        setSymbolId(tobj, globalObjectList);
+                        timer.cancel();
+                    }
+                }
+            }, 3 * 1000);
+
+            if (verbose)
+                System.out.println("del obj " + tobj.getSymbolID() + " (" + tobj.getSessionID() + ")");
+
+            if(activeMenu == 2){
+                M_Point point = new M_Point(tobj);
+                if(pointSegment[0]==null){
+                    pointSegment[0]=point;
+                }else{
+                    pointSegment[1]=point;
+                    newSegment();
+                    pointSegment[0]=point;
                 }
             }
-        }, 3*1000);
-
-        if (verbose)
-            System.out.println("del obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+")");
+        }
     }
 
     public void addTuioCursor(TuioCursor tcur) {
@@ -122,15 +140,8 @@ public class C_TuioListener implements TuioListener {
 
     public void newSegment(){
 
-        if(actualObjectList.size()==2) {
-
-            Enumeration<M_Point> objects = actualObjectList.elements();
-            M_Point p1 = objects.nextElement();
-            M_Point p2 = objects.nextElement();
-
-            M_Segment segment = new M_Segment(p1, p2);
-            addSegmentList(segment);
-        }
+        M_Segment segment = new M_Segment(pointSegment[0],pointSegment[1]);
+        addSegmentList(segment);
 
     }
 
@@ -241,6 +252,11 @@ public class C_TuioListener implements TuioListener {
         comp.repaint();
     }
 
+    public int getActiveMenu() {
+        return activeMenu;
+    }
 
-
+    public void setActiveMenu(int activeMenu) {
+        this.activeMenu = activeMenu;
+    }
 }
