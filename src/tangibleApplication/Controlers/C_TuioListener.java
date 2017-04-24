@@ -51,6 +51,7 @@ public class C_TuioListener implements TuioListener {
         if(checkId(tobj, globalObjectList)) {
             removeId(tobj, globalObjectList);
             globalObjectList.put(tobj.getSessionID(), point);
+            setDispa(tobj, globalObjectList, 0);
             M_Point pointModif = (M_Point) actualObjectList.get(tobj.getSessionID());
             pointModif.update(tobj);
         } else {
@@ -74,19 +75,18 @@ public class C_TuioListener implements TuioListener {
     public void removeTuioObject(TuioObject tobj) {
 
         removeId(tobj, actualObjectList);
+        setDispa(tobj, globalObjectList, System.currentTimeMillis());
 
         Timer timer = new Timer();
-
         timer.schedule(new TimerTask(){
             @Override
             public void run(){
-                if(!checkId(tobj, actualObjectList)){
+                if(!checkId(tobj, actualObjectList) && dispaTime(tobj, globalObjectList)){
                     setSymbolId(tobj, globalObjectList);
+                    timer.cancel();
                 }
-                timer.cancel();
             }
         }, 3*1000);
-
 
         if (verbose)
             System.out.println("del obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+")");
@@ -203,6 +203,32 @@ public class C_TuioListener implements TuioListener {
             }
 
         }
+    }
+
+    public void setDispa(TuioObject tobj, Hashtable<Long,M_Point> h, long timeDispa){
+
+        Iterator itKey = h.keySet().iterator();
+        Object o;
+        while(itKey.hasNext()){
+            o = itKey.next();
+            if(h.get(o).getSymbolID() == tobj.getSymbolID()){
+                h.get(o).setDisparition(timeDispa);
+                return;
+            }
+        }
+    }
+
+    public boolean dispaTime(TuioObject tobj, Hashtable<Long,M_Point> h) {
+
+        Iterator itKey = h.keySet().iterator();
+        Object o;
+        while (itKey.hasNext()) {
+            o = itKey.next();
+            if(h.get(o).getSymbolID() == tobj.getSymbolID()){
+                if(System.currentTimeMillis()-h.get(o).getDisparition()>=3000) return true;
+            }
+        }
+        return false;
     }
 
     public void addTuioBlob(TuioBlob tblb) {}

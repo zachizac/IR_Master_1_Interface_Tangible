@@ -18,6 +18,7 @@
 
 package TUIO;
 
+import java.sql.Timestamp;
 import java.util.Timer;
 
 /**
@@ -48,6 +49,8 @@ public class TuioObject extends TuioContainer {
 	 * Defines the ROTATING state.
 	 */ 
 	public static final int TUIO_ROTATING = 5;
+
+	private long disparition;
 
 	/**
 	 * This constructor takes a TuioTime argument and assigns it along with the provided 
@@ -213,6 +216,14 @@ public class TuioObject extends TuioContainer {
 	 */
 	public void setSymbolID(int s){
 		this.symbol_id = s;
+	}
+
+	public long getDisparition(){
+		return this.disparition;
+	}
+
+	public void setDisparition(long l){
+		this.disparition = l;
 	}
 		
 	/**
