@@ -24,7 +24,6 @@ public class V_JPanelMain extends JPanel{
     public static final int id_tagAction = 10;
     public static final Border BORDER = new LineBorder(Color.black, 5);
     public static int width, height;
-    public int actifMenu;
 
     private final int nbMenu = 5;
     private final int panelMenu_width = 150;
@@ -102,18 +101,22 @@ public class V_JPanelMain extends JPanel{
             g2.drawString(tcur.getCursorID()+"",current_point.getScreenX(w),current_point.getScreenY(h));
         }
         // draw the objects
-        Enumeration<M_Point> objects = controlClient.getGlobal0bjectList().elements();
+        Enumeration<M_Point> objects = controlClient.getGlobalObjectList().elements();
         while (objects.hasMoreElements()) {
             M_Point tobj = objects.nextElement();
             if(managePointDisplay(tobj) && (tobj!=null)) {
                 if (tobj.getSymbolID() == id_tagAction) {
 
-                    actifMenu = getMenuActived(tobj);
-                    //System.out.println("menu activé "+ actifMenu);
-                    showMenuActived(actifMenu, g2);
+                    if(getMenuActived(tobj) != controlClient.getActiveMenu() && getMenuActived(tobj) != 0) {
+                        controlClient.setActiveMenu(getMenuActived(tobj));
+                        System.out.println("menu activé "+ controlClient.getActiveMenu());
+                    }
+
+                    showMenuActived(controlClient.getActiveMenu(), g2);
                     tobj.paint(g2, width, height);
+
                 }
-                tobj.paint(g2, width, height);
+                else tobj.paint(g2, width, height);
             }
         }
         Enumeration<M_Segment> segments = controlClient.getSegmentList().elements();
@@ -137,10 +140,10 @@ public class V_JPanelMain extends JPanel{
         float coordY = point.getY()*height;
         int symbolID = point.getSymbolID();
 
-        if(coordX < panelMenu_width && symbolID == id_tagAction){
+        if(coordX < 150 && symbolID == id_tagAction){
             return true;
         }
-        else if(coordX > panelMenu_width && symbolID != id_tagAction){
+        else if(coordX > 150 && symbolID != id_tagAction){
             return true;
         }
         return false;
@@ -151,17 +154,17 @@ public class V_JPanelMain extends JPanel{
         boolean menuFounded = false;
         float coordY = point.getY()*height;
         int menuHeight = height/nbMenu;
-        int actifMenu = 0;
+        int activeMenu = 0;
 
         while(!menuFounded){
             for(int i = 1; i<= nbMenu; i++){
                 if(coordY < menuHeight*i && coordY > menuHeight* (i-1)){
                     menuFounded = true;
-                    actifMenu = i;
+                    activeMenu = i;
                 }
             }
         }
-        return actifMenu;
+        return activeMenu;
     }
 
     public void showMenuActived(int menuActived, Graphics g){
@@ -175,9 +178,8 @@ public class V_JPanelMain extends JPanel{
         g.drawString("Zone point", 30, height/(nbMenu*2));
         g.drawString("Zone segment", 30, 3*(height/(nbMenu*2)));
         g.drawString("Zone polygone", 30, 5*(height/(nbMenu*2)));
-
-
     }
+
     public C_TuioListener getTuioListener() {
         return controlClient;
     }
