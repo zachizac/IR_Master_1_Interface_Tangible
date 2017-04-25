@@ -86,19 +86,21 @@ public class C_TuioListener implements TuioListener {
 
             if(activeMenu == 2){
                 if(tobj.getSymbolID() != symboleIDSegment[0] || tobj.getSymbolID() != symboleIDSegment[1]) {
-                    if (symboleIDSegment[0] == -1) {
+                    //j'évite que le les deux id du tableau ait la meme valeur, par ailleurs je ne rempli l'indice 0 que si il est vide
+                    if (symboleIDSegment[0] == -1 || symboleIDSegment[0] == tobj.getSymbolID()) {
                         symboleIDSegment[0] = tobj.getSymbolID();
                    } else {
-                       symboleIDSegment[1] = tobj.getSymbolID();
-                      newSegment();
-                        symboleIDSegment[0] = tobj.getSymbolID();
+                        symboleIDSegment[1] = tobj.getSymbolID();
+                        newSegment();
+                        symboleIDSegment[0] = -1;
                         symboleIDSegment[1] = -1;
                     }
                 }
             }else{
-                symboleIDSegment[0]=0;
-                symboleIDSegment[1]=0;
+                symboleIDSegment[0]=-1;
+                symboleIDSegment[1]=-1;
             }
+
 
             removeId(tobj, actualObjectList);
 
@@ -160,6 +162,12 @@ public class C_TuioListener implements TuioListener {
             if (actualObjectList.get(o).getSymbolID() == symboleIDSegment[1]) p2 = actualObjectList.get(o);
         }
         if(p1 != null && p2 != null){
+            itKey = segmentList.keySet().iterator();
+            while(itKey.hasNext()) {
+                o = itKey.next();
+                if ((segmentList.get(o).getSymbolp1()==symboleIDSegment[0] && segmentList.get(o).getSymbolp2()==symboleIDSegment[1])
+                        || (segmentList.get(o).getSymbolp1()==symboleIDSegment[1] && segmentList.get(o).getSymbolp2()==symboleIDSegment[0])) return;
+            }
             nbrSegments++;
             M_Segment segment = new M_Segment(p1, p2, symboleIDSegment[0], symboleIDSegment[1],nbrSegments);
             addSegmentList(segment);
@@ -175,11 +183,9 @@ public class C_TuioListener implements TuioListener {
             o = itKey.next();
             if (segmentList.get(o).getSymbolp1() == tobj.getSymbolID()){
                 segmentList.get(o).update(point,segmentList.get(o).getP2());
-                return;
             }
             if (segmentList.get(o).getSymbolp2() == tobj.getSymbolID()){
                 segmentList.get(o).update(segmentList.get(o).getP1(),point);
-                return;
             }
         }
     }
@@ -246,12 +252,20 @@ public class C_TuioListener implements TuioListener {
             o = itKey.next();
             if(h.get(o).getSymbolID() == tobj.getSymbolID()){
                 h.get(o).setSymbolID(-incrPointId);
-                incrPointId++;
                 System.out.println(h.get(o).getSymbolID());
-                return;
             }
-
         }
+        itKey = segmentList.keySet().iterator();
+        while(itKey.hasNext()) {
+            o = itKey.next();
+            if (segmentList.get(o).getSymbolp1()==tobj.getSymbolID()){
+                segmentList.get(o).setSymbolp1(-incrPointId);
+            }
+            if (segmentList.get(o).getSymbolp2()==tobj.getSymbolID()){
+                segmentList.get(o).setSymbolp2(-incrPointId);
+            }
+        }
+        incrPointId++;
     }
 
     public void setDispa(TuioObject tobj, Hashtable<Long,M_Point> h, long timeDispa){
