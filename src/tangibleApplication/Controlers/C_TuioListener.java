@@ -17,13 +17,13 @@ public class C_TuioListener implements TuioListener {
     private Hashtable<Long, TuioCursor> cursorList = new Hashtable<Long,TuioCursor>();
     private Hashtable<Long, M_Segment> segmentList = new Hashtable<Long, M_Segment>();
 
-    private M_Point [] pointSegment = {null, null};
+    private int [] symboleIDSegment = {-1, -1};
 
     int incrPointId = 1;
 
     V_JPanelMain comp;
     private boolean verbose = false;
-    private Long nbrSegments = new Long(0);
+    private int nbrSegments = 0;
 
     int activeMenu;
 
@@ -53,14 +53,17 @@ public class C_TuioListener implements TuioListener {
         actualObjectList.put(tobj.getSessionID(), point);
 
         if(checkId(tobj, globalObjectList)) {
+            majSegments(tobj);
             removeId(tobj, globalObjectList);
             globalObjectList.put(tobj.getSessionID(), point);
             setDispa(tobj, globalObjectList, 0);
             M_Point pointModif = (M_Point) actualObjectList.get(tobj.getSessionID());
             pointModif.update(tobj);
+
         } else {
             globalObjectList.put(tobj.getSessionID(), point);
         }
+
 
         if (verbose)
             System.out.println("add obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+") "+tobj.getX()+" "+tobj.getY()+" "+tobj.getAngle());
@@ -71,16 +74,33 @@ public class C_TuioListener implements TuioListener {
 
             M_Point point = (M_Point) actualObjectList.get(tobj.getSessionID()); // on recup le point dans la liste globale et on l update
             point.update(tobj);
+            majSegments(tobj);
        // }
         if (verbose)
             System.out.println("set obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+") "+tobj.getX()+" "+tobj.getY()+" "+tobj.getAngle()+" "+tobj.getMotionSpeed()+" "+tobj.getRotationSpeed()+" "+tobj.getMotionAccel()+" "+tobj.getRotationAccel());
     }
 
     public void removeTuioObject(TuioObject tobj) {
-
-        removeId(tobj, actualObjectList);
-
         if(tobj.getSymbolID()!=id_tagAction) {
+
+            if(activeMenu == 2){
+                if(tobj.getSymbolID() != symboleIDSegment[0] || tobj.getSymbolID() != symboleIDSegment[1]) {
+                    if (symboleIDSegment[0] == -1) {
+                        symboleIDSegment[0] = tobj.getSymbolID();
+                   } else {
+                       symboleIDSegment[1] = tobj.getSymbolID();
+                      newSegment();
+                        symboleIDSegment[0] = tobj.getSymbolID();
+                        symboleIDSegment[1] = -1;
+                    }
+                }
+            }else{
+                symboleIDSegment[0]=0;
+                symboleIDSegment[1]=0;
+            }
+
+            removeId(tobj, actualObjectList);
+
             setDispa(tobj, globalObjectList, System.currentTimeMillis());
 
             Timer timer = new Timer();
@@ -96,17 +116,6 @@ public class C_TuioListener implements TuioListener {
 
             if (verbose)
                 System.out.println("del obj " + tobj.getSymbolID() + " (" + tobj.getSessionID() + ")");
-
-            if(activeMenu == 2){
-                M_Point point = new M_Point(tobj);
-                if(pointSegment[0]==null){
-                    pointSegment[0]=point;
-                }else{
-                    pointSegment[1]=point;
-                    newSegment();
-                    pointSegment[0]=point;
-                }
-            }
         }
     }
 
@@ -140,14 +149,42 @@ public class C_TuioListener implements TuioListener {
 
     public void newSegment(){
 
-        M_Segment segment = new M_Segment(pointSegment[0],pointSegment[1]);
-        addSegmentList(segment);
+        Iterator itKey = actualObjectList.keySet().iterator();
+        Object o;
+        M_Point p1 = null;
+        M_Point p2 = null;
+        while(itKey.hasNext()) {
+            o = itKey.next();
+            if (actualObjectList.get(o).getSymbolID() == symboleIDSegment[0]) p1 = actualObjectList.get(o);
+            if (actualObjectList.get(o).getSymbolID() == symboleIDSegment[1]) p2 = actualObjectList.get(o);
+        }
+        if(p1 != null && p2 != null){
+            nbrSegments++;
+            M_Segment segment = new M_Segment(p1, p2, symboleIDSegment[0], symboleIDSegment[1],nbrSegments);
+            addSegmentList(segment);
+        }
 
     }
 
+    public void majSegments(TuioObject tobj){
+        Iterator itKey = segmentList.keySet().iterator();
+        Object o;
+        M_Point point = new M_Point(tobj);
+        while(itKey.hasNext()) {
+            o = itKey.next();
+            if (segmentList.get(o).getSymbolp1() == tobj.getSymbolID()){
+                segmentList.get(o).update(point,segmentList.get(o).getP2());
+                return;
+            }
+            if (segmentList.get(o).getSymbolp2() == tobj.getSymbolID()){
+                segmentList.get(o).update(segmentList.get(o).getP1(),point);
+                return;
+            }
+        }
+    }
+
     public void addSegmentList(M_Segment segment) {
-        nbrSegments++;
-        this.segmentList.put(nbrSegments,segment);
+        this.segmentList.put((long)nbrSegments,segment);
     }
 
     public boolean isVerbose() {
