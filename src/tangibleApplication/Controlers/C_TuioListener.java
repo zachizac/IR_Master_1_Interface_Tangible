@@ -25,7 +25,7 @@ public class C_TuioListener implements TuioListener {
     private boolean verbose = false;
     private int nbrSegments = 0;
 
-    int activeMenu;
+    public int activeMenu;
 
 
     public C_TuioListener(V_JPanelMain comp){
@@ -71,10 +71,11 @@ public class C_TuioListener implements TuioListener {
 
     public void updateTuioObject(TuioObject tobj) {
        // if(tobj.getSymbolID() != comp.id_segment) {
-
-            M_Point point = (M_Point) actualObjectList.get(tobj.getSessionID()); // on recup le point dans la liste globale et on l update
-            point.update(tobj);
-            majSegments(tobj);
+            if(!actualObjectList.isEmpty()) {
+                M_Point point = (M_Point) actualObjectList.get(tobj.getSessionID()); // on recup le point dans la liste globale et on l update
+                point.update(tobj);
+                majSegments(tobj);
+            }
        // }
         if (verbose)
             System.out.println("set obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+") "+tobj.getX()+" "+tobj.getY()+" "+tobj.getAngle()+" "+tobj.getMotionSpeed()+" "+tobj.getRotationSpeed()+" "+tobj.getMotionAccel()+" "+tobj.getRotationAccel());
@@ -279,6 +280,18 @@ public class C_TuioListener implements TuioListener {
         return false;
     }
 
+    public void resetHashTable(TuioObject tobj, Hashtable<Long, M_Point> h){
+
+        Iterator itKey = h.keySet().iterator();
+        Object o;
+        while(itKey.hasNext()){
+            o = itKey.next();
+            if(h.get(o).getSymbolID()!= tobj.getSymbolID()){
+                h.remove(o);
+                return;
+            }
+        }
+    }
     public void addTuioBlob(TuioBlob tblb) {}
 
     public void updateTuioBlob(TuioBlob tblb) {}

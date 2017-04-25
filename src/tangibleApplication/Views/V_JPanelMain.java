@@ -11,6 +11,8 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
 
 /**
  * Created by Zachizac on 04/04/2017.
@@ -25,7 +27,7 @@ public class V_JPanelMain extends JPanel{
     public static final Border BORDER = new LineBorder(Color.black, 5);
     public static int width, height;
 
-    private final int nbMenu = 5;
+    private final int nbMenu = 4;
     private final int panelMenu_width = 150;
 
 
@@ -67,12 +69,8 @@ public class V_JPanelMain extends JPanel{
         for(int i=1;i<nbMenu;i++){
             g2.drawLine(0, i*(height/nbMenu), panelMenu_width, i*(height/nbMenu));
         }
-        Font font = new Font("Courier", Font.BOLD,12);
-        g2.setFont(font);
-        g2.drawString("Zone point", 30, height/(nbMenu*2));
-        g2.drawString("Zone segment", 30, 3*(height/(nbMenu*2)));
-        g2.drawString("Zone polygone", 30, 5*(height/(nbMenu*2)));
 
+        writeMenuNames(g2);
         g2.setStroke(new BasicStroke(1));
 
         int w = (int)Math.round(width-scale*finger_size/2.0f);
@@ -115,6 +113,9 @@ public class V_JPanelMain extends JPanel{
                     showMenuActived(controlClient.getActiveMenu(), g2);
                     tobj.paint(g2, width, height);
 
+                    if(getMenuActived(tobj) == 4){
+                        resetDispay(tobj, controlClient);
+                    }
                 }
                 else tobj.paint(g2, width, height);
             }
@@ -173,11 +174,27 @@ public class V_JPanelMain extends JPanel{
         g.setColor(Color.lightGray);
         g.fillRect(5, ((menuActived-1)*menuHeight)+2,panelMenu_width-6,menuHeight-3); //demande pas pourquoi ces valeurs
         g.setColor(Color.black);
+        writeMenuNames(g);
+    }
+
+
+    public void resetDispay(TuioObject tobj, C_TuioListener controleur){
+
+        controleur.resetHashTable(tobj, controleur.getGlobalObjectList());
+        controleur.resetHashTable(tobj, controleur.getActualObjectList());
+        controleur.getSegmentList().clear();
+        this.repaint();
+    }
+
+
+    public void writeMenuNames(Graphics g){
+
         Font font = new Font("Courier", Font.BOLD,12);
         g.setFont(font);
         g.drawString("Zone point", 30, height/(nbMenu*2));
         g.drawString("Zone segment", 30, 3*(height/(nbMenu*2)));
         g.drawString("Zone polygone", 30, 5*(height/(nbMenu*2)));
+        g.drawString("Effacer", 30, 7*(height/(nbMenu*2)));
     }
 
     public C_TuioListener getTuioListener() {
