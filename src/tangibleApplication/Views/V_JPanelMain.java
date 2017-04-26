@@ -113,7 +113,7 @@ public class V_JPanelMain extends JPanel{
                     showMenuActived(controlClient.getActiveMenu(), g2);
                     tobj.paint(g2, width, height);
 
-                    if(getMenuActived(tobj) == 4){
+                    if(getMenuActived(tobj) == nbMenu){
                         resetDispay(tobj, controlClient);
                     }
                 }
@@ -123,7 +123,10 @@ public class V_JPanelMain extends JPanel{
         Enumeration<M_Segment> segments = controlClient.getSegmentList().elements();
         while (segments.hasMoreElements()){
             M_Segment s = segments.nextElement();
+            g2.setStroke(new BasicStroke(4));
+            g2.setColor(Color.black);
             if(s!=null) s.paint(g2, width, height);
+            g2.setStroke(new BasicStroke(1));
         }
 
         super.paintBorder(g2);

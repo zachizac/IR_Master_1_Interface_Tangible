@@ -32,21 +32,7 @@ public class C_TuioListener implements TuioListener {
         this.comp = comp;
         this.nbMenu = comp.getNbMenu();
     }
-
-    /*public void addTuioObject(TuioObject tobj) {
-        if(tobj.getSymbolID() == comp.id_segment){
-            newSegment();
-        }
-        else {
-            M_Point point = new M_Point(tobj);
-            actualObjectList.put(tobj.getSessionID(), point);
-            if(!checkId(point))
-                globalObjectList.put(tobj.getSessionID(), point);
-        }
-        if (verbose)
-            System.out.println("add obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+") "+tobj.getX()+" "+tobj.getY()+" "+tobj.getAngle());
-    }*/
-
+    
     public void addTuioObject(TuioObject tobj) {
 
         M_Point point = new M_Point(tobj);
@@ -198,34 +184,6 @@ public class C_TuioListener implements TuioListener {
         }
     }
 
-    public void addSegmentList(M_Segment segment) {
-        this.segmentList.put((long)nbrSegments,segment);
-    }
-
-    public boolean isVerbose() {
-        return verbose;
-    }
-
-    public void setVerbose(boolean verbose) {
-        this.verbose = verbose;
-    }
-
-    public Hashtable<Long, TuioCursor> getCursorList() {
-        return cursorList;
-    }
-
-    public Hashtable<Long, M_Point> getActualObjectList() {
-        return actualObjectList;
-    }
-
-    public Hashtable<Long, M_Point> getGlobalObjectList() {
-        return globalObjectList;
-    }
-
-    public Hashtable<Long, M_Segment> getSegmentList() {
-        return segmentList;
-    }
-
     public boolean checkId(TuioObject tobj, Hashtable<Long,M_Point> h){
 
         Iterator itKey = h.keySet().iterator();
@@ -314,6 +272,36 @@ public class C_TuioListener implements TuioListener {
             }
         }
     }
+
+
+    public void addSegmentList(M_Segment segment) {
+        this.segmentList.put((long)nbrSegments,segment);
+    }
+
+    public boolean isVerbose() {
+        return verbose;
+    }
+
+    public void setVerbose(boolean verbose) {
+        this.verbose = verbose;
+    }
+
+    public Hashtable<Long, TuioCursor> getCursorList() {
+        return cursorList;
+    }
+
+    public Hashtable<Long, M_Point> getActualObjectList() {
+        return actualObjectList;
+    }
+
+    public Hashtable<Long, M_Point> getGlobalObjectList() {
+        return globalObjectList;
+    }
+
+    public Hashtable<Long, M_Segment> getSegmentList() {
+        return segmentList;
+    }
+
     public void addTuioBlob(TuioBlob tblb) {}
 
     public void updateTuioBlob(TuioBlob tblb) {}
