@@ -92,11 +92,11 @@ public class V_JPanelMain extends JPanel{
                 }
             }
             // draw the finger tip
-            g2.setPaint(Color.lightGray);
+            /*g2.setPaint(Color.lightGray);
             int s = (int)(scale*finger_size);
             g2.fillOval(current_point.getScreenX(w-s/2),current_point.getScreenY(h-s/2),s,s);
             g2.setPaint(Color.black);
-            g2.drawString(tcur.getCursorID()+"",current_point.getScreenX(w),current_point.getScreenY(h));
+            g2.drawString(tcur.getCursorID()+"",current_point.getScreenX(w),current_point.getScreenY(h));*/
         }
         // draw the objects
         Enumeration<M_Point> objects = controlClient.getGlobalObjectList().elements();
@@ -174,7 +174,8 @@ public class V_JPanelMain extends JPanel{
     public void showMenuActived(int menuActived, Graphics g){
 
         int menuHeight = height/nbMenu;
-        g.setColor(Color.lightGray);
+        Color myBlue = new Color (49, 140, 231);
+        g.setColor(myBlue);
         g.fillRect(5, ((menuActived-1)*menuHeight)+2,panelMenu_width-6,menuHeight-3); //demande pas pourquoi ces valeurs
         g.setColor(Color.black);
         writeMenuNames(g);
