@@ -24,12 +24,13 @@ public class C_TuioListener implements TuioListener {
     V_JPanelMain comp;
     private boolean verbose = false;
     private int nbrSegments = 0;
-
+    public int nbMenu;
     public int activeMenu;
 
 
-    public C_TuioListener(V_JPanelMain comp){
+    public C_TuioListener(V_JPanelMain comp, int nbMenu){
         this.comp = comp;
+        this.nbMenu = comp.getNbMenu();
     }
 
     /*public void addTuioObject(TuioObject tobj) {
@@ -70,13 +71,20 @@ public class C_TuioListener implements TuioListener {
     }
 
     public void updateTuioObject(TuioObject tobj) {
-       // if(tobj.getSymbolID() != comp.id_segment) {
-            if(!actualObjectList.isEmpty()) {
-                M_Point point = (M_Point) actualObjectList.get(tobj.getSessionID()); // on recup le point dans la liste globale et on l update
+
+        if(activeMenu == nbMenu){ //Si on se trouve dans le menu effacer
+            if(tobj.getSymbolID()==id_tagAction){
+                    M_Point point = (M_Point) actualObjectList.get(tobj.getSessionID()); // on recup le point dans la liste actuelle et on l update
+                point.update(tobj);
+            }
+        }else {
+            M_Point point = (M_Point) actualObjectList.get(tobj.getSessionID());
+            if(point != null) { // Empeche d'appeler update sur un point null
                 point.update(tobj);
                 majSegments(tobj);
             }
-       // }
+        }
+
         if (verbose)
             System.out.println("set obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+") "+tobj.getX()+" "+tobj.getY()+" "+tobj.getAngle()+" "+tobj.getMotionSpeed()+" "+tobj.getRotationSpeed()+" "+tobj.getMotionAccel()+" "+tobj.getRotationAccel());
     }

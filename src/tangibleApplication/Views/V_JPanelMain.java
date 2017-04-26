@@ -27,7 +27,7 @@ public class V_JPanelMain extends JPanel{
     public static final Border BORDER = new LineBorder(Color.black, 5);
     public static int width, height;
 
-    private final int nbMenu = 4;
+    private  int nbMenu = 4;
     private final int panelMenu_width = 150;
 
 
@@ -39,7 +39,7 @@ public class V_JPanelMain extends JPanel{
     public V_JPanelMain(){
         super();
         this.setBorder(BORDER);
-        controlClient = new C_TuioListener(this);
+        controlClient = new C_TuioListener(this, nbMenu);
     }
 
     public void setSize(int w, int h) {
@@ -200,6 +200,6 @@ public class V_JPanelMain extends JPanel{
     public C_TuioListener getTuioListener() {
         return controlClient;
     }
-
+    public int getNbMenu() { return nbMenu; }
 
 }
