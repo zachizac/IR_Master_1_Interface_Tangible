@@ -27,7 +27,7 @@ public class V_JPanelMain extends JPanel{
     public static final Border BORDER = new LineBorder(Color.black, 5);
     public static int width, height;
 
-    private  int nbMenu = 4;
+    private  int nbMenu = 5;
     private final int panelMenu_width = 150;
 
 
@@ -204,10 +204,11 @@ public class V_JPanelMain extends JPanel{
 
         Font font = new Font("Courier", Font.BOLD,13);
         g.setFont(font);
-        g.drawString("Zone point", 30, height/(nbMenu*2));
-        g.drawString("Zone segment", 30, 3*(height/(nbMenu*2)));
-        g.drawString("Zone polygone", 30, 5*(height/(nbMenu*2)));
-        g.drawString("Effacer", 30, 7*(height/(nbMenu*2)));
+        g.drawString("Mode point", 30, height/(nbMenu*2));
+        g.drawString("Mode segment", 30, 3*(height/(nbMenu*2)));
+        g.drawString("Mode polygone", 30, 5*(height/(nbMenu*2)));
+        g.drawString("Mode cercle", 30, 7*(height/(nbMenu*2)));
+        g.drawString("Corbeille", 30, 9*(height/(nbMenu*2)));
     }
 
     public C_TuioListener getTuioListener() {
