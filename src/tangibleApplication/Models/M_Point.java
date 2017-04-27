@@ -37,7 +37,7 @@ public class M_Point extends TuioObject {
             trans.scale(scale,scale);
             Shape s = trans.createTransformedShape(point);
 
-            g.setPaint(Color.black);
+           // g.setPaint(Color.black);
             g.fill(s);
             g.setPaint(Color.white);
            // g.drawString(symbol_id+"",Xpos-10,Ypos);

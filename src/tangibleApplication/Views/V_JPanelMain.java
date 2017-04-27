@@ -117,7 +117,16 @@ public class V_JPanelMain extends JPanel{
                         resetDispay(tobj, controlClient);
                     }
                 }
-                else tobj.paint(g2, width, height);
+                else {
+                    if(controlClient.getActualObjectList().contains(tobj)){
+                        g2.setColor(Color.black);
+                        tobj.paint(g2, width, height);
+                    }
+                    else {
+                        g2.setColor(Color.blue);
+                        tobj.paint(g2, width, height);
+                    }
+                }
             }
         }
         Enumeration<M_Segment> segments = controlClient.getSegmentList().elements();
@@ -193,7 +202,7 @@ public class V_JPanelMain extends JPanel{
 
     public void writeMenuNames(Graphics g){
 
-        Font font = new Font("Courier", Font.BOLD,12);
+        Font font = new Font("Courier", Font.BOLD,13);
         g.setFont(font);
         g.drawString("Zone point", 30, height/(nbMenu*2));
         g.drawString("Zone segment", 30, 3*(height/(nbMenu*2)));
