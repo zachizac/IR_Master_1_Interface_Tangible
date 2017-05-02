@@ -274,6 +274,15 @@ public class C_TuioListener implements TuioListener {
     }
 
 
+    public void resetDisplay(TuioObject tobj){
+
+        resetHashTable(tobj, globalObjectList);
+        resetHashTable(tobj, actualObjectList);
+        getSegmentList().clear();
+        comp.repaint();
+    }
+
+
     public void addSegmentList(M_Segment segment) {
         this.segmentList.put((long)nbrSegments,segment);
     }

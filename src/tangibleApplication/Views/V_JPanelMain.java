@@ -114,7 +114,7 @@ public class V_JPanelMain extends JPanel{
                     tobj.paint(g2, width, height);
 
                     if(getMenuActived(tobj) == nbMenu){
-                        resetDispay(tobj, controlClient);
+                        controlClient.resetDisplay(tobj);
                     }
                 }
                 else {
@@ -188,15 +188,6 @@ public class V_JPanelMain extends JPanel{
         g.fillRect(5, ((menuActived-1)*menuHeight)+2,panelMenu_width-6,menuHeight-3); //demande pas pourquoi ces valeurs
         g.setColor(Color.black);
         writeMenuNames(g);
-    }
-
-
-    public void resetDispay(TuioObject tobj, C_TuioListener controleur){
-
-        controleur.resetHashTable(tobj, controleur.getGlobalObjectList());
-        controleur.resetHashTable(tobj, controleur.getActualObjectList());
-        controleur.getSegmentList().clear();
-        this.repaint();
     }
 
 
