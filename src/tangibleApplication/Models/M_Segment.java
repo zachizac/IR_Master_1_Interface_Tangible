@@ -83,4 +83,8 @@ public class M_Segment {
     public void setNumSegment(int numSegment) {
         this.numSegment = numSegment;
     }
+
+    public float getDistance(){
+        return p1.getDistance(p2);
+    }
 }
