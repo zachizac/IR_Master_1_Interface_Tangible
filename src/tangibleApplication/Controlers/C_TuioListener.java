@@ -1,6 +1,7 @@
 package tangibleApplication.Controlers;
 
 import TUIO.*;
+import tangibleApplication.Models.M_Cercle;
 import tangibleApplication.Models.M_Point;
 import tangibleApplication.Models.M_Segment;
 import tangibleApplication.Views.V_JPanelMain;
@@ -16,14 +17,16 @@ public class C_TuioListener implements TuioListener {
     private Hashtable<Long,M_Point> globalObjectList = new Hashtable<Long, M_Point>(); //Liste de tous les points apparut au oours de cette instance
     private Hashtable<Long, TuioCursor> cursorList = new Hashtable<Long,TuioCursor>();
     private Hashtable<Long, M_Segment> segmentList = new Hashtable<Long, M_Segment>();
+    private Hashtable<Long, M_Cercle> cercleList = new Hashtable<Long, M_Cercle>();
 
-    private int [] symboleIDSegment = {-1, -1};
+    private int [] symboleIDFigure = {-1, -1};
 
     int incrPointId = 1;
 
     V_JPanelMain comp;
     private boolean verbose = false;
     private int nbrSegments = 0;
+    private int nbrCercle = 0;
     public int nbMenu;
     public int activeMenu;
 
@@ -41,6 +44,7 @@ public class C_TuioListener implements TuioListener {
 
         if(checkId(tobj, globalObjectList)) {
             majSegments(tobj);
+            majCercle(tobj);
             removeId(tobj, globalObjectList);
             globalObjectList.put(tobj.getSessionID(), point);
             setDispa(tobj, globalObjectList, 0);
@@ -68,6 +72,7 @@ public class C_TuioListener implements TuioListener {
             if(point != null) { // Empeche d'appeler update sur un point null
                 point.update(tobj);
                 majSegments(tobj);
+                majCercle(tobj);
             }
         }
 
@@ -78,21 +83,36 @@ public class C_TuioListener implements TuioListener {
     public void removeTuioObject(TuioObject tobj) {
         if(tobj.getSymbolID()!=id_tagAction) {
 
-            if(activeMenu == 2){
-                if(tobj.getSymbolID() != symboleIDSegment[0] || tobj.getSymbolID() != symboleIDSegment[1]) {
-                    //j'évite que le les deux id du tableau ait la meme valeur, par ailleurs je ne rempli l'indice 0 que si il est vide
-                    if (symboleIDSegment[0] == -1 || symboleIDSegment[0] == tobj.getSymbolID()) {
-                        symboleIDSegment[0] = tobj.getSymbolID();
-                   } else {
-                        symboleIDSegment[1] = tobj.getSymbolID();
-                        newSegment();
-                        symboleIDSegment[0] = -1;
-                        symboleIDSegment[1] = -1;
+            switch (activeMenu) {
+                case 2:
+                    if (tobj.getSymbolID() != symboleIDFigure[0] || tobj.getSymbolID() != symboleIDFigure[1]) {
+                        //j'évite que le les deux id du tableau ait la meme valeur, par ailleurs je ne rempli l'indice 0 que si il est vide
+                        if (symboleIDFigure[0] == -1 || symboleIDFigure[0] == tobj.getSymbolID()) {
+                            symboleIDFigure[0] = tobj.getSymbolID();
+                        } else {
+                            symboleIDFigure[1] = tobj.getSymbolID();
+                            newSegment();
+                            symboleIDFigure[0] = -1;
+                            symboleIDFigure[1] = -1;
+                        }
                     }
-                }
-            }else{
-                symboleIDSegment[0]=-1;
-                symboleIDSegment[1]=-1;
+                    break;
+                case 4:
+                    if (tobj.getSymbolID() != symboleIDFigure[0] || tobj.getSymbolID() != symboleIDFigure[1]) {
+                        //j'évite que le les deux id du tableau ait la meme valeur, par ailleurs je ne rempli l'indice 0 que si il est vide
+                        if (symboleIDFigure[0] == -1 || symboleIDFigure[0] == tobj.getSymbolID()) {
+                            symboleIDFigure[0] = tobj.getSymbolID();
+                        } else {
+                            symboleIDFigure[1] = tobj.getSymbolID();
+                            newCercle();
+                            symboleIDFigure[0] = -1;
+                            symboleIDFigure[1] = -1;
+                        }
+                    }
+                    break;
+                default:
+                    symboleIDFigure[0] = -1;
+                    symboleIDFigure[1] = -1;
             }
 
 
@@ -152,18 +172,18 @@ public class C_TuioListener implements TuioListener {
         M_Point p2 = null;
         while(itKey.hasNext()) {
             o = itKey.next();
-            if (actualObjectList.get(o).getSymbolID() == symboleIDSegment[0]) p1 = actualObjectList.get(o);
-            if (actualObjectList.get(o).getSymbolID() == symboleIDSegment[1]) p2 = actualObjectList.get(o);
+            if (actualObjectList.get(o).getSymbolID() == symboleIDFigure[0]) p1 = actualObjectList.get(o);
+            if (actualObjectList.get(o).getSymbolID() == symboleIDFigure[1]) p2 = actualObjectList.get(o);
         }
         if(p1 != null && p2 != null){
             itKey = segmentList.keySet().iterator();
             while(itKey.hasNext()) {
                 o = itKey.next();
-                if ((segmentList.get(o).getSymbolp1()==symboleIDSegment[0] && segmentList.get(o).getSymbolp2()==symboleIDSegment[1])
-                        || (segmentList.get(o).getSymbolp1()==symboleIDSegment[1] && segmentList.get(o).getSymbolp2()==symboleIDSegment[0])) return;
+                if ((segmentList.get(o).getSymbolp1()==symboleIDFigure[0] && segmentList.get(o).getSymbolp2()==symboleIDFigure[1])
+                        || (segmentList.get(o).getSymbolp1()==symboleIDFigure[1] && segmentList.get(o).getSymbolp2()==symboleIDFigure[0])) return;
             }
             nbrSegments++;
-            M_Segment segment = new M_Segment(p1, p2, symboleIDSegment[0], symboleIDSegment[1],nbrSegments);
+            M_Segment segment = new M_Segment(p1, p2, symboleIDFigure[0], symboleIDFigure[1],nbrSegments);
             addSegmentList(segment);
         }
 
@@ -183,6 +203,45 @@ public class C_TuioListener implements TuioListener {
             }
         }
     }
+
+    public void newCercle(){
+        Iterator itKey = actualObjectList.keySet().iterator();
+        Object o;
+        M_Point centre = null;
+        M_Point point = null;
+        while(itKey.hasNext()) {
+            o = itKey.next();
+            if (actualObjectList.get(o).getSymbolID() == symboleIDFigure[0]) centre = actualObjectList.get(o);
+            if (actualObjectList.get(o).getSymbolID() == symboleIDFigure[1]) point = actualObjectList.get(o);
+        }
+        if(centre != null && point != null){
+            itKey = cercleList.keySet().iterator();
+            while(itKey.hasNext()) {
+                o = itKey.next();
+                if ((cercleList.get(o).getSymbolCentre()==symboleIDFigure[0] && cercleList.get(o).getSymbolPoint()==symboleIDFigure[1])
+                        || (cercleList.get(o).getSymbolCentre()==symboleIDFigure[1] && cercleList.get(o).getSymbolPoint()==symboleIDFigure[0])) return;
+            }
+            nbrCercle++;
+            M_Cercle cercle = new M_Cercle(centre, point, symboleIDFigure[0], symboleIDFigure[1],nbrCercle);
+            addCercleList(cercle);
+        }
+    }
+
+    public void majCercle(TuioObject tobj){
+        Iterator itKey = cercleList.keySet().iterator();
+        Object o;
+        M_Point point = new M_Point(tobj);
+        while(itKey.hasNext()) {
+            o = itKey.next();
+            if (cercleList.get(o).getSymbolCentre() == tobj.getSymbolID()){
+                cercleList.get(o).update(point,cercleList.get(o).getPoint());
+            }
+            if (cercleList.get(o).getSymbolPoint() == tobj.getSymbolID()){
+                cercleList.get(o).update(cercleList.get(o).getCentre(),point);
+            }
+        }
+    }
+
 
     public boolean checkId(TuioObject tobj, Hashtable<Long,M_Point> h){
 
@@ -229,6 +288,18 @@ public class C_TuioListener implements TuioListener {
             }
             if (segmentList.get(o).getSymbolp2()==tobj.getSymbolID()){
                 segmentList.get(o).setSymbolp2(-incrPointId);
+            }
+        }
+        incrPointId++;
+
+        itKey = cercleList.keySet().iterator();
+        while(itKey.hasNext()) {
+            o = itKey.next();
+            if (cercleList.get(o).getSymbolCentre()==tobj.getSymbolID()){
+                cercleList.get(o).setSymbolCentre(-incrPointId);
+            }
+            if (cercleList.get(o).getSymbolPoint()==tobj.getSymbolID()){
+                cercleList.get(o).setSymbolPoint(-incrPointId);
             }
         }
         incrPointId++;
@@ -279,12 +350,17 @@ public class C_TuioListener implements TuioListener {
         resetHashTable(tobj, globalObjectList);
         resetHashTable(tobj, actualObjectList);
         getSegmentList().clear();
+        getCercleList().clear();
         comp.repaint();
     }
 
 
     public void addSegmentList(M_Segment segment) {
         this.segmentList.put((long)nbrSegments,segment);
+    }
+
+    public void addCercleList(M_Cercle cercle) {
+        this.cercleList.put((long)nbrCercle,cercle);
     }
 
     public boolean isVerbose() {
@@ -309,6 +385,10 @@ public class C_TuioListener implements TuioListener {
 
     public Hashtable<Long, M_Segment> getSegmentList() {
         return segmentList;
+    }
+
+    public Hashtable<Long, M_Cercle> getCercleList() {
+        return cercleList;
     }
 
     public void addTuioBlob(TuioBlob tblb) {}

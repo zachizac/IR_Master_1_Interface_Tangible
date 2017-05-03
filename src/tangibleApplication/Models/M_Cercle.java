@@ -3,6 +3,7 @@ package tangibleApplication.Models;
 import tangibleApplication.Views.V_JPanelMain;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 
@@ -16,7 +17,7 @@ public class M_Cercle {
     private M_Point point;
     private M_Segment rayon;
     private int SymbolCentre;
-    private int SymbolRayon;
+    private int SymbolPoint;
     private int numCercle;
 
     /**
@@ -31,14 +32,14 @@ public class M_Cercle {
         this.point = p2;
         this.rayon = new M_Segment(p1,p2,sP1,sP2,-1);
         this.SymbolCentre = sP1;
-        this.SymbolRayon = sP2;
+        this.SymbolPoint = sP2;
         this.numCercle = numCercle;
-        cercle = new Ellipse2D.Float(-centre.getX()-rayon.getDistance(),-centre.getY()-rayon.getDistance(),rayon.getDistance(),rayon.getDistance());
+        //cercle = new Ellipse2D.Float(centre.getX()-rayon.getDistance(),centre.getY()-rayon.getDistance(),rayon.getDistance()*2,rayon.getDistance()*2);
     }
 
     public void paint(Graphics2D g, int width, int height) {
 
-        Shape c1 = new Ellipse2D.Float(-centre.getX()-rayon.getDistance(),-centre.getY()-rayon.getDistance(),rayon.getDistance(),rayon.getDistance());
+        Shape c1 = new Ellipse2D.Float((centre.getX()-rayon.getDistance())*width,(centre.getY()-rayon.getDistance())*height,rayon.getDistance()*2*width,rayon.getDistance()*2*height);
         g.setPaint(Color.black);
         g.draw(c1);
         g.setPaint(Color.white);
@@ -50,7 +51,7 @@ public class M_Cercle {
         this.centre = p1;
         this.point = p2;
         this.rayon = new M_Segment(p1,p2,p1.getSymbolID(),p2.getSymbolID(),numCercle);
-        cercle = new Ellipse2D.Float(-centre.getX()-rayon.getDistance(),-centre.getY()-rayon.getDistance(),rayon.getDistance(),rayon.getDistance());
+        //cercle = new Ellipse2D.Float(centre.getX()-rayon.getDistance(),centre.getY()-rayon.getDistance(),rayon.getDistance()*2,rayon.getDistance()*2);
 
     }
 
@@ -86,12 +87,12 @@ public class M_Cercle {
         SymbolCentre = symbolCentre;
     }
 
-    public int getSymbolRayon() {
-        return SymbolRayon;
+    public int getSymbolPoint() {
+        return SymbolPoint;
     }
 
-    public void setSymbolRayon(int symbolRayon) {
-        SymbolRayon = symbolRayon;
+    public void setSymbolPoint(int symbolPoint) {
+        SymbolPoint = symbolPoint;
     }
 
     public int getNumCercle() {

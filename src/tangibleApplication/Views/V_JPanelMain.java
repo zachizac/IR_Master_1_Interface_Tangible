@@ -2,6 +2,7 @@ package tangibleApplication.Views;
 
 import TUIO.*;
 import tangibleApplication.Controlers.C_TuioListener;
+import tangibleApplication.Models.M_Cercle;
 import tangibleApplication.Models.M_Point;
 import tangibleApplication.Models.M_Segment;
 
@@ -136,6 +137,12 @@ public class V_JPanelMain extends JPanel{
             g2.setColor(Color.black);
             if(s!=null) s.paint(g2, width, height);
             g2.setStroke(new BasicStroke(1));
+        }
+        Enumeration<M_Cercle> cercles = controlClient.getCercleList().elements();
+        while (cercles.hasMoreElements()){
+            M_Cercle c = cercles.nextElement();
+            g2.setColor(Color.black);
+            if(c!=null) c.paint(g2, width, height);
         }
 
         super.paintBorder(g2);

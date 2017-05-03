@@ -25,7 +25,6 @@ public class M_Segment {
      */
     public M_Segment(M_Point p1, M_Point p2, int sP1, int sP2, int numSegment) {
 
-        int size = V_JPanelMain.object_size/2;
         this.p1 = p1;
         this.p2 = p2;
         this.Symbolp1 = sP1;
