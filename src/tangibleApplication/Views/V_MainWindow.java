@@ -16,7 +16,7 @@ import java.awt.image.BufferedImage;
 public class V_MainWindow {
 
     private final int window_width  = 1024;
-    private final int window_height = 768;
+    private final int window_height = 1024;
     private final int panelMenu_width = 100;
 
     private boolean fullscreen = false;
@@ -36,6 +36,7 @@ public class V_MainWindow {
         invisibleCursor = Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "invisible cursor");
         setupWindow();
         showWindow();
+
     }
 
     /**

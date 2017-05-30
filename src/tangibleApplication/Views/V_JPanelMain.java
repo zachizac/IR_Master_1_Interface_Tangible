@@ -28,13 +28,14 @@ public class V_JPanelMain extends JPanel{
     public static final Border BORDER = new LineBorder(Color.black, 5);
     public static int width, height;
 
-    private  int nbMenu = 5;
+    private  int nbMenu = 4;
     private final int panelMenu_width = 150;
 
 
     private float scale = 1.0f;
     private C_TuioListener controlClient;
 
+    private String pointSelect ="";
 
 
     public V_JPanelMain(){
@@ -99,31 +100,36 @@ public class V_JPanelMain extends JPanel{
             g2.setPaint(Color.black);
             g2.drawString(tcur.getCursorID()+"",current_point.getScreenX(w),current_point.getScreenY(h));*/
         }
+        affPointSelect(g2);
+
         // draw the objects
         Enumeration<M_Point> objects = controlClient.getGlobalObjectList().elements();
         while (objects.hasMoreElements()) {
             M_Point tobj = objects.nextElement();
-            if(managePointDisplay(tobj) && (tobj!=null)) {
+            if (managePointDisplay(tobj) && (tobj != null)) {
                 if (tobj.getSymbolID() == id_tagAction) {
 
-                    if(getMenuActived(tobj) != controlClient.getActiveMenu() && getMenuActived(tobj) != 0) {
+                    if (getMenuActived(tobj) != controlClient.getActiveMenu() && getMenuActived(tobj) != 0) {
                         controlClient.setActiveMenu(getMenuActived(tobj));
-                        System.out.println("menu activé "+ controlClient.getActiveMenu());
+                        System.out.println("menu activé " + controlClient.getActiveMenu());
                     }
 
                     showMenuActived(controlClient.getActiveMenu(), g2);
                     tobj.paint(g2, width, height);
 
-                    if(getMenuActived(tobj) == nbMenu){
+                    if (getMenuActived(tobj) == nbMenu) {
                         controlClient.resetDisplay(tobj);
                     }
-                }
-                else {
-                    if(controlClient.getActualObjectList().contains(tobj)){
-                        g2.setColor(Color.black);
+                } else {
+                    int[] pSelect = controlClient.getSymboleIDFigure();
+                    if (controlClient.getActualObjectList().contains(tobj)) {
+                        if (pSelect[0] == tobj.getSymbolID()) {
+                            g2.setColor(Color.red);
+                        } else {
+                            g2.setColor(Color.black);
+                        }
                         tobj.paint(g2, width, height);
-                    }
-                    else {
+                    } else {
                         g2.setColor(Color.blue);
                         tobj.paint(g2, width, height);
                     }
@@ -139,10 +145,9 @@ public class V_JPanelMain extends JPanel{
             g2.setStroke(new BasicStroke(1));
         }
         Enumeration<M_Cercle> cercles = controlClient.getCercleList().elements();
-        while (cercles.hasMoreElements()){
+        while (cercles.hasMoreElements()) {
             M_Cercle c = cercles.nextElement();
-            g2.setColor(Color.black);
-            if(c!=null) c.paint(g2, width, height);
+            if (c != null) c.paint(g2, width, height);
         }
 
         super.paintBorder(g2);
@@ -204,14 +209,25 @@ public class V_JPanelMain extends JPanel{
         g.setFont(font);
         g.drawString("Mode point", 30, height/(nbMenu*2));
         g.drawString("Mode segment", 30, 3*(height/(nbMenu*2)));
-        g.drawString("Mode polygone", 30, 5*(height/(nbMenu*2)));
-        g.drawString("Mode cercle", 30, 7*(height/(nbMenu*2)));
-        g.drawString("Corbeille", 30, 9*(height/(nbMenu*2)));
+        g.drawString("Mode cercle", 30, 5*(height/(nbMenu*2)));
+        g.drawString("Corbeille", 30, 7*(height/(nbMenu*2)));
+    }
+
+    public void affPointSelect(Graphics g){
+        Font font = new Font("Courier", Font.BOLD,13);
+        g.setFont(font);
+        g.setColor(Color.black);
+        g.drawString(this.pointSelect, width - 200, 30);
+        g.setColor(Color.white);
     }
 
     public C_TuioListener getTuioListener() {
         return controlClient;
     }
     public int getNbMenu() { return nbMenu; }
+
+    public void setPointSelect(String text) {
+        pointSelect = text;
+    }
 
 }

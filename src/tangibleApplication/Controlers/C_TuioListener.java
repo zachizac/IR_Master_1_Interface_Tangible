@@ -27,8 +27,8 @@ public class C_TuioListener implements TuioListener {
     private boolean verbose = false;
     private int nbrSegments = 0;
     private int nbrCercle = 0;
-    public int nbMenu;
-    public int activeMenu;
+    private int nbMenu;
+    private int activeMenu;
 
 
     public C_TuioListener(V_JPanelMain comp, int nbMenu){
@@ -85,32 +85,47 @@ public class C_TuioListener implements TuioListener {
 
             switch (activeMenu) {
                 case 2:
-                    if (tobj.getSymbolID() != symboleIDFigure[0] || tobj.getSymbolID() != symboleIDFigure[1]) {
-                        //j'évite que le les deux id du tableau ait la meme valeur, par ailleurs je ne rempli l'indice 0 que si il est vide
-                        if (symboleIDFigure[0] == -1 || symboleIDFigure[0] == tobj.getSymbolID()) {
-                            symboleIDFigure[0] = tobj.getSymbolID();
-                        } else {
-                            symboleIDFigure[1] = tobj.getSymbolID();
-                            newSegment();
-                            symboleIDFigure[0] = -1;
-                            symboleIDFigure[1] = -1;
+                    if (tobj.getSymbolID() == symboleIDFigure[0]){
+                        symboleIDFigure[0] = -1;
+                        comp.setPointSelect("Aucun point sélectionné");
+                    }else {
+                        if (tobj.getSymbolID() != symboleIDFigure[0] || tobj.getSymbolID() != symboleIDFigure[1]) {
+                            //j'évite que le les deux id du tableau ait la meme valeur, par ailleurs je ne rempli l'indice 0 que si il est vide
+                            if (symboleIDFigure[0] == -1 || symboleIDFigure[0] == tobj.getSymbolID()) {
+                                symboleIDFigure[0] = tobj.getSymbolID();
+                                comp.setPointSelect("");
+                            } else {
+                                symboleIDFigure[1] = tobj.getSymbolID();
+                                newSegment();
+                                symboleIDFigure[0] = -1;
+                                symboleIDFigure[1] = -1;
+                                comp.setPointSelect("");
+                            }
                         }
                     }
                     break;
-                case 4:
-                    if (tobj.getSymbolID() != symboleIDFigure[0] || tobj.getSymbolID() != symboleIDFigure[1]) {
-                        //j'évite que le les deux id du tableau ait la meme valeur, par ailleurs je ne rempli l'indice 0 que si il est vide
-                        if (symboleIDFigure[0] == -1 || symboleIDFigure[0] == tobj.getSymbolID()) {
-                            symboleIDFigure[0] = tobj.getSymbolID();
-                        } else {
-                            symboleIDFigure[1] = tobj.getSymbolID();
-                            newCercle();
-                            symboleIDFigure[0] = -1;
-                            symboleIDFigure[1] = -1;
+                case 3:
+                    if (tobj.getSymbolID() == symboleIDFigure[0]){
+                        symboleIDFigure[0] = -1;
+                        comp.setPointSelect("Aucun point sélectionné");
+                    }else {
+                        if (tobj.getSymbolID() != symboleIDFigure[0] || tobj.getSymbolID() != symboleIDFigure[1]) {
+                            //j'évite que le les deux id du tableau ait la meme valeur, par ailleurs je ne rempli l'indice 0 que si il est vide
+                            if (symboleIDFigure[0] == -1 || symboleIDFigure[0] == tobj.getSymbolID()) {
+                                symboleIDFigure[0] = tobj.getSymbolID();
+                                comp.setPointSelect("");
+                            } else {
+                                symboleIDFigure[1] = tobj.getSymbolID();
+                                newCercle();
+                                symboleIDFigure[0] = -1;
+                                symboleIDFigure[1] = -1;
+                                comp.setPointSelect("");
+                            }
                         }
                     }
                     break;
                 default:
+                    comp.setPointSelect("");
                     symboleIDFigure[0] = -1;
                     symboleIDFigure[1] = -1;
             }
@@ -407,5 +422,14 @@ public class C_TuioListener implements TuioListener {
 
     public void setActiveMenu(int activeMenu) {
         this.activeMenu = activeMenu;
+        symboleIDFigure[0] = -1;
+        symboleIDFigure[1] = -1;
+        if(activeMenu == 2 || activeMenu == 3){
+            comp.setPointSelect("Aucun point sélectionné !");
+        }else comp.setPointSelect("");
+    }
+
+    public int[] getSymboleIDFigure() {
+        return symboleIDFigure;
     }
 }
